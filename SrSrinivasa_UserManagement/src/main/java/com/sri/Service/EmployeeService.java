@@ -3,6 +3,8 @@ package com.sri.Service;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.sri.Entity.Employee;
@@ -22,4 +24,8 @@ public interface EmployeeService extends UserDetailsService{
 	String getFullNameWithEmail(String email);
 	List<String> getRolesWithEmail(String email);
 	String setPasswordWithEmail(String email,String oldPswrd,String newPswrd) throws passwordNotMatchedException;
+	
+	Page<Employee> findByDepartment(String department,Pageable pageable);
+	Page<Employee> findByRoles(Set<String> roles,Pageable pageable);
+	Page<Employee> getAllEmployees(Pageable pageable);
 }

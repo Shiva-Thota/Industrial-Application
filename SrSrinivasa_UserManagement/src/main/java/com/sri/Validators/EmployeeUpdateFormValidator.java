@@ -1,5 +1,7 @@
 package com.sri.Validators;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,12 +9,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeModel;
 
 @Component
 public class EmployeeUpdateFormValidator implements Validator{
 
+	private static final List<String> SUPPORTED_CONTENT_TYPES = Arrays.asList("image/jpeg", "image/png", "image/jpg");
+	
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return clazz.isAssignableFrom(EmployeeModel.class);
@@ -55,10 +58,14 @@ public class EmployeeUpdateFormValidator implements Validator{
 		
 		if(emp.getAddharCard()==null ) {
 			errors.rejectValue("addharCard", "emp.addharCard.null");
+		}else if(!SUPPORTED_CONTENT_TYPES.contains(emp.getAddharCard().getContentType())) {
+			errors.rejectValue("addharCard", "emp.addharCard.UnSupportedFromat");
 		}
 		
 		if(emp.getPhoto()==null) {
 			errors.rejectValue("photo", "emp.photo.null");
+		}else if(!SUPPORTED_CONTENT_TYPES.contains(emp.getPhoto().getContentType())) {
+			errors.rejectValue("photo", "emp.photo.UnSupportedFromat");
 		}
 		
 		if(emp.getBloodGroup()==null ||emp.getBloodGroup().isBlank()) {

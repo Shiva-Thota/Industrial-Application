@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.sri.Entity.Employee;
@@ -76,6 +78,22 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		// TODO Auto-generated method stub
 		empRepo.setPasswordWithEmail(password,email);
 		return "Password Updated";
+	}
+
+	@Override
+	public Page<Employee> findByDepartment(String department, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByDepartment(department, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByRoles(Set<String> roles, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByRoles(roles, pageable);
+	}
+	@Override
+	public Page<Employee> getAllEmployees(Pageable pageable){
+		return empRepo.findAll(pageable);
 	}
 
 }

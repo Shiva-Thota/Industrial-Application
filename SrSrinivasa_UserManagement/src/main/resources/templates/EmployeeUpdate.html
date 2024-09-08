@@ -12,7 +12,7 @@
 <br><br><br><br><br><br><br><br><br><br>
     <div class="container">
         <h2>Employee Update Form</h2>
-        <form th:action="@{/emp/updateEmp}" method="POST" th:object="${employeeModel}" enctype="multipart/form-data">
+        <form th:action="@{/user/updateEmp}" method="POST" th:object="${employeeModel}" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label for="first_name">First Name:</label> <span style="color:red" class="error" th:if="${#fields.hasErrors('firstName')}" th:text="${#fields.errors('firstName')}"></span>
@@ -26,7 +26,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" th:field="*{email}" readonly>
+                    <input type="email" id="email" th:field="*{email}" >
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:text="${#fields.errors('phoneNumber')}"></span>
@@ -100,13 +100,13 @@
             <div class="form-row">
                 <div class="form-group full-width">
                     <label for="resume">Upload Image:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('photo')}" th:text="${#fields.errors('photo')}"></span>
-                    <input type="file" id="resume" th:field="*{photo}"  required>
+                    <input type="file"  id="resume" th:field="*{photo}"  required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group full-width">
                     <label for="resume">Upload Addhar:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('addharCard')}" th:text="${#fields.errors('addharCard')}"></span>
-                    <input type="file" id="resume" th:field="*{addharCard}"  required>
+                    <input type="file" id="resume"  th:field="*{addharCard}"  required>
                 </div>
             </div>
             <div class="form-row">

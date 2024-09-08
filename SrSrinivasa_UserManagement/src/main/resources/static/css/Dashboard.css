@@ -117,3 +117,24 @@
         .card button:hover {
             background-color: #16a085;
         }
+        
+        
+        /* Link styled as a button */
+.button-link {
+    background-color: #1ABC9C;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+}
+
+.button-link:hover {
+    background-color: #16a085; /* Darker green on hover */
+    
+ }

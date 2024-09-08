@@ -3,6 +3,8 @@ package com.sri.Repository;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.sri.Entity.Employee;
 
 import jakarta.transaction.Transactional;
+import java.util.Set;
+
 
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
@@ -40,7 +44,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	
 	@Query("Select password from Employee where email =:email")
 	public String getPasswordWithEmail(String email);
-
 	
+	public Page<Employee> findByDepartment(String department,Pageable pageable);
+
+	public Page<Employee> findByRoles(Set<String> roles,Pageable pageable);
 	
 }

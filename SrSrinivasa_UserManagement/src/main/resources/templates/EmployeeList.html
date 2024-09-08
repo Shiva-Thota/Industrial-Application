@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        tr:hover {background-color: #f5f5f5;}
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+        }
+        .pagination a:hover {
+            background-color: #45a049;
+        }
+        .disabled {
+            pointer-events: none;
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Employee List</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Father</th>
+            <th>Department</th>
+            <th>PhoneNumber</th>
+            <th>Date of Hire</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="employee : ${EmployeesList.content}">
+            <td th:text="${employee.firstName}"></td>
+            <td th:text="${employee.father}"></td>
+            <td th:text="${employee.department}"></td>
+            <td th:text="${employee.phoneNumber}"></td>
+            <td th:text="${employee.dateOfJoining}"></td>
+            <td>
+                <a th:href="@{/hr/profile(email=${employee.email})}">View</a> |
+                <a th:href="@{/hr/updateEmp(email=${employee.email})}">Edit</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div class="pagination">
+    <a th:href="@{/hr/allEmpList(page=${EmployeesList.number - 1})}" th:classappend="${EmployeesList.first}? 'disabled' : ''">Previous</a>
+    
+    <span>Page <span th:text="${EmployeesList.number + 1}"></span> of <span th:text="${EmployeesList.totalPages}"></span></span>
+    
+    <a th:href="@{/hr/allEmpList(page=${EmployeesList.number + 1})}" th:classappend="${EmployeesList.last}? 'disabled' : ''">Next</a>
+</div>
+
+</body>
+</html>

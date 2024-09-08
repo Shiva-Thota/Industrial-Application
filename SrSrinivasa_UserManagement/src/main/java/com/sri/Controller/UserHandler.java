@@ -19,14 +19,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeModel;
 import com.sri.Exceptions.EmployeeNotFoundException;
+import com.sri.Exceptions.NotAuthorizedException;
 import com.sri.Exceptions.passwordNotMatchedException;
 import com.sri.Service.EmployeeService;
 import com.sri.Validators.EmployeeRegistrationValidator;
 import com.sri.Validators.EmployeeUpdateFormValidator;
 
 @Controller
-@RequestMapping("/emp")
-public class EmployeeHandler {
+@RequestMapping("/user")
+public class UserHandler {
 	
 	@Autowired
 	EmployeeService empSer;
@@ -49,13 +50,11 @@ public class EmployeeHandler {
 		return "EmployeeLogin";
 	}
 	
-	@GetMapping("/register")
-	public String getregisterPage(@ModelAttribute Employee employee) {
-		return "EmployeeRegister";
-	}
 	
+	//Profile Page
 	@GetMapping("/profile")
-	public String getProfilePage(@RequestParam String email,@ModelAttribute Employee emp,Map<String,Object> map) {
+	public String getProfilePage(@ModelAttribute Employee emp,Map<String,Object> map,Principal principal) {
+		String email=principal.getName();
 		String photo="";
 		if(empSer.getPhotoWithEmail(email)!=null)
 			photo=Base64.getEncoder().encodeToString(empSer.getPhotoWithEmail(email));
@@ -74,7 +73,8 @@ public class EmployeeHandler {
 	
 	
 	@GetMapping("/updateEmp")
-	public String getUpdatePage(@RequestParam String email, @ModelAttribute EmployeeModel employeeModel,Map<String,Object> map) {
+	public String getUpdatePage(@ModelAttribute EmployeeModel employeeModel,Map<String,Object> map,Principal principal) {
+		String email=principal.getName();
 		try {
 			EmployeeModel empModel=empSer.getEmployeeModel(email);
 			map.put("employeeModel", empModel);
@@ -85,7 +85,7 @@ public class EmployeeHandler {
 	}
 	
 	@GetMapping("/passwordChangePage")
-	public String getPasswordChangePage(@RequestParam String email) {
+	public String getPasswordChangePage() {
 		return "EmployeePswrdChnge";
 	}
 	
@@ -102,21 +102,13 @@ public class EmployeeHandler {
 		return "EmployeePswrdChnge";
 	}
 	
-	@PostMapping("/register")
-	public String registerEmployee(@ModelAttribute Employee employee,RedirectAttributes redirectAttribute,BindingResult error ) {
-		
-		if(employeeRegistrationValidator.supports(Employee.class)) {
-			employeeRegistrationValidator.validate(employee, error);
-			if(error.hasErrors())
-				return "EmployeeRegister";
-		}
-		String msg=empSer.addEmployee(employee);
-		redirectAttribute.addFlashAttribute("Employee Added", msg);
-		return "redirect:/";
-	}
+	 
 	
 	@PostMapping("/updateEmp")
-	public String updateEmployeee(@ModelAttribute EmployeeModel employeeModel,RedirectAttributes redirectAttribute,BindingResult error) {
+	public String updateEmployeee(@ModelAttribute EmployeeModel employeeModel,RedirectAttributes redirectAttribute,BindingResult error,Principal principal) throws NotAuthorizedException {
+		String email=principal.getName();
+		if(!employeeModel.getEmail().equals(email))
+			throw new NotAuthorizedException("Not Authorized");
 		try {
 			if(employeeUpdateFormValidator.supports(EmployeeModel.class)) {
 				employeeUpdateFormValidator.validate(employeeModel, error);

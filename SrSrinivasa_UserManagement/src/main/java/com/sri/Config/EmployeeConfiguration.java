@@ -35,14 +35,14 @@ public class EmployeeConfiguration {
     @Bean
     SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
     	http.authorizeHttpRequests(req->
-    		req.requestMatchers("/","/emp/loginPage","/images/**","/css/**","/emp/register").permitAll()
+    		req.requestMatchers("/","/user/loginPage","/images/**","/css/**","/user/register").permitAll()
     		.anyRequest().authenticated()
     	)
     	.formLogin(frm->
-    		frm.loginPage("/emp/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/Dashboard/")
+    		frm.loginPage("/user/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/Dashboard/")
     	).logout(logout -> logout
     	        .logoutRequestMatcher(new AntPathRequestMatcher("/signOut"))
-    	        .logoutSuccessUrl("/emp/loginPage?logout")
+    	        .logoutSuccessUrl("/user/loginPage?logout")
     	);
     	return http.build();
     }

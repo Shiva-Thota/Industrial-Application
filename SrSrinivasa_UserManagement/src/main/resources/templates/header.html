@@ -105,7 +105,7 @@ header .dropdown a:hover {
                     <p><strong><span th:text="${session.employeeUserName}"></span></strong></p>
                     <p>Email:<span th:text="${session.employeeEmail}"></span></p>
                     <p>Roles:<div th:each="role : ${session.employeeRoles}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${role}"></span></div></p>
-                    <a th:href="@{/emp/profile(email=${session.employeeEmail})}">Profile</a>
+                    <a th:href="@{/user/profile}">Profile</a>
                     <a th:href="@{/signOut}">Logout</a>
                 </div>
             </div>

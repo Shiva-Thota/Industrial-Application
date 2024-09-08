@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -131,6 +133,24 @@ public class EmployeeServiceImpl implements EmployeeService{
 		}else {
 			throw new  passwordNotMatchedException("Password Not Matched");
 		}
+	}
+
+	@Override
+	public Page<Employee> findByDepartment(String department, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empDao.findByDepartment(department, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByRoles(Set<String> roles, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empDao.findByRoles(roles, pageable);
+	}
+
+	@Override
+	public Page<Employee> getAllEmployees(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empDao.getAllEmployees(pageable);
 	}
 
 }
