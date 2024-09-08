@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: 10px 1fr 50px;
+            height: 100vh;
+            grid-template-areas: 
+                "header header"
+                "sidebar main"
+                "footer footer";
+        }
+
+        header {
+            grid-area: header;
+            display: flex;
+            align-items: center;
+            background-color: #2C3E50;
+            color: white;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+            background-color: #2C3E50;
+            padding: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #1ABC9C;
+            color: white;
+        }
+
+        main {
+            grid-area: main;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        footer {
+            grid-area: footer;
+            background-color: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .card button {
+            background-color: #1ABC9C;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .card button:hover {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="header"></div>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Dashboard</h1>
+        </header>
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#" class="nav-link" data-section="overview">Overview</a></li>
+                <li><a href="#" class="nav-link" data-section="production">Production Monitoring</a></li>
+                <li><a href="#" class="nav-link" data-section="maintenance">Maintenance</a></li>
+                <li><a href="#" class="nav-link" data-section="equipment">Equipment Health</a></li>
+                <li><a href="#" class="nav-link" data-section="inventory">Inventory</a></li>
+                <li><a href="#" class="nav-link" data-section="reports">Reports & Analytics</a></li>
+                <li><a href="#" class="nav-link" data-section="settings">Settings</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Sections to dynamically show/hide -->
+            <section id="overview" class="section">
+                <h2>HR Management Overview</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h3>Manage Employee Records</h3>
+                        <p>Records include roles, departments, and payroll integration.</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Recruitment and Onboarding</h3>
+                        <p>Oversees recruitment, onboarding, and offboarding processes.</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Compliance Management</h3>
+                        <p>Ensures compliance with safety, environmental, and regulatory standards.</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Audits and Compliance Reports</h3>
+                        <p>Conducts audits and prepares compliance reports.</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Attendance and Payroll</h3>
+                        <p>Tracks attendance, manages payroll, and handles employee performance reviews.</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Budget Collaboration</h3>
+                        <p>Works closely with the Finance Manager on budget-related matters concerning HR.</p>
+                        <button>View Details</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="production" class="section hidden">
+                 <h2>Production Monitoring</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h3>Total Production Output</h3>
+                        <p>5,000 units</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Production Efficiency</h3>
+                        <p>85% efficiency</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Production Downtime</h3>
+                        <p>2 hours last month</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Machine Utilization</h3>
+                        <p>90% utilization</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Shift Performance</h3>
+                        <p>Day shift: 95% performance<br>Night shift: 80% performance</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Production Forecast</h3>
+                        <p>Projected output for next month: 6,000 units</p>
+                        <button>View Details</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="maintenance" class="section hidden">
+                 <h2>Maintenance</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h3>Upcoming Maintenance</h3>
+                        <p>Scheduled for next week</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Maintenance Requests</h3>
+                        <p>10 pending requests</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Completed Maintenance</h3>
+                        <p>15 requests completed this month</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Maintenance Costs</h3>
+                        <p>$5,000 last month</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Equipment Health</h3>
+                        <p>85% of equipment in good condition</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Maintenance Trends</h3>
+                        <p>Increased requests during summer</p>
+                        <button>View Details</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="equipment" class="section hidden">
+                 <h2>Quality Control</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h3>Quality Metrics</h3>
+                        <p>Defect rate: 1%</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Inspection Results</h3>
+                        <p>95% passed inspections</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Non-Conformance Reports</h3>
+                        <p>5 reports this month</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Corrective Actions</h3>
+                        <p>3 corrective actions implemented</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Supplier Quality</h3>
+                        <p>98% of suppliers meet quality standards</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Quality Trends</h3>
+                        <p>Improvement noted over the last quarter</p>
+                        <button>View Details</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="inventory" class="section hidden">
+                
+                  <h2>Inventory Dashboard</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h3>Total Inventory Items</h3>
+                        <p>1,500 items</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Items by Category</h3>
+                        <p>Electronics: 600<br>Furniture: 300<br>Supplies: 600</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Inventory Value</h3>
+                        <p>$450,000</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Stock Levels</h3>
+                        <p>Critical Stock: 5 items<br>Low Stock: 50 items</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Recent Orders</h3>
+                        <p>Last 30 days: 75 orders</p>
+                        <button>View Details</button>
+                    </div>
+                    <div class="card">
+                        <h3>Supplier Information</h3>
+                        <p>Top 5 suppliers by order volume</p>
+                        <button>View Details</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="reports" class="section hidden">
+                <h2>Reports and Analytics</h2>
+                <p>Reports and analytics details go here.</p>
+            </section>
+
+            <section id="settings" class="section hidden">
+                <h2>Settings</h2>
+                <p>Configuration settings go here.</p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Industrial Company - All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript for dynamic content switching
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Remove active class from all links
+                    links.forEach(l => l.classList.remove('active'));
+
+                    // Hide all sections
+                    sections.forEach(section => section.classList.add('hidden'));
+
+                    // Show the target section
+                    const sectionToShow = this.getAttribute('data-section');
+                    document.getElementById(sectionToShow).classList.remove('hidden');
+
+                    // Set the clicked link as active
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

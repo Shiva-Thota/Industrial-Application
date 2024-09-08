@@ -1,0 +1,119 @@
+  * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: 10px 1fr 50px;
+            height: 100vh;
+            grid-template-areas: 
+                "header header"
+                "sidebar main"
+                "footer footer";
+        }
+
+        header {
+            grid-area: header;
+            display: flex;
+            align-items: center;
+            background-color: #2C3E50;
+            color: white;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+            background-color: #2C3E50;
+            padding: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #1ABC9C;
+            color: white;
+        }
+
+        main {
+            grid-area: main;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        footer {
+            grid-area: footer;
+            background-color: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .card button {
+            background-color: #1ABC9C;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .card button:hover {
+            background-color: #16a085;
+        }

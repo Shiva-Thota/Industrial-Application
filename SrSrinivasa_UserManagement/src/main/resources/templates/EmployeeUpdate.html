@@ -1,0 +1,122 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Update</title>
+    <link rel="stylesheet" type="text/css" media="all"
+     href="/css/index.css" th:href="@{/css/RegisterStyles.css}" />
+    
+</head>
+<body>
+<div th:replace="header"></div><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br>
+    <div class="container">
+        <h2>Employee Update Form</h2>
+        <form th:action="@{/emp/updateEmp}" method="POST" th:object="${employeeModel}" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name">First Name:</label> <span style="color:red" class="error" th:if="${#fields.hasErrors('firstName')}" th:text="${#fields.errors('firstName')}"></span>
+                    <input type="text" id="first_name" th:field="*{firstName}" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('lastName')}" th:text="${#fields.errors('lastName')}"></span>
+                    <input type="text" id="last_name" th:field="*{lastName}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:text="${#fields.errors('phoneNumber')}"></span>
+                    <input type="tel" id="phone" th:field="*{phoneNumber}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('dateOfBirth')}" th:text="${#fields.errors('dateOfBirth')}"></span>
+                    <input type="date" id="dob" th:field="*{dateOfBirth}" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('gender')}" th:text="${#fields.errors('gender')}"></span>
+                    <select id="gender" th:field="*{gender}" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="position">Father:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('father')}" th:text="${#fields.errors('father')}"></span>
+                    <input type="text" id="position" th:field="*{father}" required>
+                </div>
+                <div class="form-group">
+                    <label for="department">Addhar No:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('addharNo')}" th:text="${#fields.errors('addharNo')}"></span>
+                    <input type="text" id="department" th:field="*{addharNo}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="position">Emergency Contact Name:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('emergencyPerson')}" th:text="${#fields.errors('emergencyPerson')}"></span>
+                    <input type="text" id="position" th:field="*{emergencyPerson}" required>
+                </div>
+                <div class="form-group">
+                    <label for="department">Emergency Contact Number:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('emergencyContact')}" th:text="${#fields.errors('emergencyContact')}"></span>
+                    <input type="text" id="department" th:field="*{emergencyContact}" required>
+                </div>
+            </div>
+            <div class="form-row">
+               <div class="form-group">
+                    <label for="maritalStatus">Marital Status:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('maritalStatus')}" th:text="${#fields.errors('maritalStatus')}"></span>
+                    <select id="maritalStatus" th:field="*{maritalStatus}" required>
+                        <option value="single">Single</option>
+			            <option value="married">Married</option>
+			            <option value="divorced">Divorced</option>
+			            <option value="widowed">Widowed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="BloodGroup">Blood Group:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('bloodGroup')}" th:text="${#fields.errors('bloodGroup')}"></span>
+                    <select id="BloodGroup" th:field="*{bloodGroup}" required>
+                        <option value="A+">A+</option>
+			            <option value="A-">A-</option>
+			            <option value="B+">B+</option>
+			            <option value="B-">B-</option>
+			            <option value="AB+">AB+</option>
+			            <option value="AB-">AB-</option>
+			            <option value="O+">O+</option>
+			            <option value="O-">O-</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="address">Address:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('address')}" th:text="${#fields.errors('address')}"></span>
+                    <textarea id="address" th:field="*{address}" rows="4" required></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="resume">Upload Image:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('photo')}" th:text="${#fields.errors('photo')}"></span>
+                    <input type="file" id="resume" th:field="*{photo}"  required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="resume">Upload Addhar:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('addharCard')}" th:text="${#fields.errors('addharCard')}"></span>
+                    <input type="file" id="resume" th:field="*{addharCard}"  required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <button type="submit">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    
+</body>
+</html>

@@ -1,0 +1,152 @@
+ /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and Overall Layout */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+    		align-items: center;
+            height: 100vh;
+        }
+
+        /* Header Styling */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #2C3E50;
+            color: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure header stays on top of other content */
+            transition: transform 0.3s ease; /* Smooth transition for sliding effect */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 170px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 80px; /* Add padding to account for fixed header height */
+            overflow-y: auto; /* Allow scrolling if content overflows */
+        }
+
+        /* Container for the Form */
+        .container {
+            background-color: #2C3E50;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 5px;
+        }
+
+        h2 {
+            text-align: center;
+            color: white; /* Header text color */
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            width: 48%;
+            margin-bottom: 15px;
+        }
+
+        .form-group.full-width {
+            width: 100%;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group select[multiple] {
+            height: auto;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .radio-group label {
+            margin-right: 10px;
+        }
+
+        #selected-roles {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #1ABC9C; /* Match with the button color */
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1ABC9C; /* Button color */
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #16a085; /* Darker shade for hover effect */
+        }
+
+        @media (max-width: 600px) {
+            .form-group {
+                width: 100%;
+            }
+        }

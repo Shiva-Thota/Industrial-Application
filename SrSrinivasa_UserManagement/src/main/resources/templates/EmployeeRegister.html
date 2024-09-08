@@ -1,0 +1,101 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+    <link rel="stylesheet" type="text/css" media="all"
+     href="/css/index.css" th:href="@{/css/RegisterStyles.css}" />
+
+</head>
+
+<body>
+    <!--      Header -->
+<header>
+        <div class="logo">
+        	<a th:href="@{/}"><img th:src="@{/images/logo.png}"></a>
+            <h1>Sri Srinivasa Industries</h1>
+        </div>
+</header>
+<br><br><br><br><br><br>
+    <div class="container">
+
+        <h2>Employee Registration</h2>
+        <form th:action="@{/emp/register}" th:object="${employee}" method="POST">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_th:field">First Name:</label>        <span style="color:red" class="error" th:if="${#fields.hasErrors('firstName')}" th:text="${#fields.errors('firstName')}"></span>
+                    <input type="text" id="first_th:field" th:field="*{firstName}" Required>
+                </div>
+                <div class="form-group">
+                    <label for="last_th:field">Last Name:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('lastName')}" th:text="${#fields.errors('lastName')}"></span>
+                    <input type="text" id="last_th:field" th:field="*{lastName}" Required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('email')}" th:text="${#fields.errors('email')}"></span>
+                    <input type="email" id="email" th:field="*{email}" Required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:text="${#fields.errors('phoneNumber')}"></span>
+                    <input type="tel" id="phone" th:field="*{phoneNumber}" Required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('dateOfBirth')}" th:text="${#fields.errors('dateOfBirth')}"></span>
+                    <input type="date" id="dob" th:field="*{dateOfBirth}" Required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('gender')}" th:text="${#fields.errors('gender')}"></span>
+                    <select id="gender" th:field="*{gender}" Required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="adhr">Addhar Number:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('addharNo')}" th:text="${#fields.errors('addharNo')}"></span>
+                    <input type="text" id="adhr" th:field="*{addharNo}" Required>
+                </div>
+                <div class="form-group">
+                    <label for="dprt">Department:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('department')}" th:text="${#fields.errors('department')}"></span>
+			        <select th:field="*{department}" id="dprt">
+			            <option th:each="dept : ${Departments}" th:value="${dept}" th:text="${dept}"></option>
+			        </select><br><br>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="roles">Roles:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('roles')}" th:text="${#fields.errors('roles')}"></span>
+                     <select id="roles" th:field="*{roles}" multiple Required onchange="updateSelectedRoles()">
+			            <option th:each="skill : ${Roles}"
+			                    th:value="${skill}"
+			                    th:text="${skill}"></option>
+			        </select>
+                    <div id="selected-roles" style="color:white"></div> <!-- This is where the selected roles will be displayed -->
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label><span style="color:red" class="error" th:if="${#fields.hasErrors('address')}" th:text="${#fields.errors('address')}"></span>
+                    <textarea id="address" th:field="*{address}" rows="4" Required></textarea>
+                </div>
+            </div>
+            <div class="form-group full-width">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function updateSelectedRoles() {
+            const rolesSelect = document.getElementById('roles');
+            const selectedRolesDiv = document.getElementById('selected-roles');
+            const selectedOptions = Array.from(rolesSelect.selectedOptions).map(option => option.text);
+            selectedRolesDiv.innerHTML = selectedOptions.length ? 'Selected Roles: ' + selectedOptions.join(', ') : '';
+        }
+        
+    </script>
+    
+</body>
+</html>

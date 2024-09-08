@@ -1,0 +1,74 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" media="all"
+     href="/css/index.css" th:href="@{/css/HomeStyles.css}" /> 
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+     
+        <div class="logo">
+        	<a th:href="@{./}"><img th:src="@{/images/logo.png}"></a>
+            <h1>Sri Srinivasa Industries</h1>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a th:href="@{./}">Home</a></li>
+                <li><a th:href="@{/Dashboard/hr}">HR</a></li>
+                <li><a th:href="@{/emp/updateEmp}">Documentation</a></li>
+                <li><a th:href="@{/Dashboard/}">DashBoard</a></li>
+                <li><a th:href="@{/emp/loginPage}" class="btn-login">Login</a></li>
+                <li><a th:href="@{/emp/register}" class="btn-signup">Sign Up</a></li>
+           </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Optimize Your Industrial Workflow</h2>
+            <p>Seamlessly manage production, maintenance, and equipment health with real-time monitoring and powerful analytics.</p>
+            <a href="#" class="btn-get-started">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>Core Features</h2>
+        <div class="features-container">
+            <div class="feature-box">
+                <h3>Real-Time Monitoring</h3>
+                <p>Track your machinery and production lines in real-time to avoid downtime and improve efficiency.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Maintenance Management</h3>
+                <p>Automate maintenance scheduling and track the health of your equipment with predictive analytics.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Detailed Reports</h3>
+                <p>Get comprehensive reports on energy consumption, production rates, and equipment utilization.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta">
+        <h2>Ready to Boost Your Industrial Performance?</h2>
+        <p>Sign up today and start optimizing your operations with our all-in-one platform.</p>
+        <a href="#" class="btn-signup">Login</a>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Industrial Application. All rights reserved.</p>
+        <nav class="footer-nav">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Support</a>
+        </nav>
+    </footer>
+</body>
+</html>

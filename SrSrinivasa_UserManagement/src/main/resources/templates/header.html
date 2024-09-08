@@ -1,0 +1,120 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">  
+<style>/* Header */
+header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2C3E50;
+    color: white;
+    padding: 0 20px;
+    height: 90px; /* Increase height of the header */
+    
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo img {
+    height: 60px; /* Set the logo size */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Space between the logo and title */
+}
+
+header .logo h1 {
+    font-size: 24px;
+}
+
+header .profile {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+header .profile span {
+    margin-right: 20px;
+}
+
+header .user-info {
+    display: flex;
+    align-items: center;
+}
+
+header .user-info img {
+	height: 75px; /* Set the logo size */
+    width: auto;
+    border-radius: 40%;
+    margin-right: 10px;
+}
+
+header .dropdown {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #34495e; /* Darker shade to match dashboard */
+    color: white; /* White text for contrast */
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 250px; /* Increased width */
+    z-index: 1;
+    padding: 20px; /* Increased padding */
+    transition: transform 0.3s ease-in-out;
+}
+
+header .dropdown p {
+    margin: 10px 0;
+    font-size: 16px; /* Increased font size */
+    color: #ecf0f1; /* Light grey text for softer appearance */
+}
+
+header .dropdown a {
+    display: block;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: #1ABC9C; /* Matched with sidebar hover color */
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+header .dropdown a:hover {
+    background-color: #16a085;
+    transform: scale(1.05); /* Slightly increases size on hover */
+}</style>
+<header>
+   <div class="logo">
+                <!-- Industry Logo -->
+        	<a th:href="@{/Dashboard/}"><img th:src="@{/images/logo.png}"></a>
+                <h1>Sri Srinivasa Industries</h1>
+            </div>
+            <div class="profile" id="profile">
+                <span th:text="${#dates.format(#dates.createNow(), 'HH:mm - dd MMM yyyy')}" ></span>
+                <div class="user-info">
+                   <img th:src="@{'data:image/jpeg;base64,'+${session.employeePhoto}}" alt="Employee Image"/>
+                    <span th:text="${session.employeeUserName}"></span>
+                </div>
+                <!-- Dropdown Menu -->
+                <div class="dropdown" id="dropdown">
+                    <p><strong><span th:text="${session.employeeUserName}"></span></strong></p>
+                    <p>Email:<span th:text="${session.employeeEmail}"></span></p>
+                    <p>Roles:<div th:each="role : ${session.employeeRoles}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${role}"></span></div></p>
+                    <a th:href="@{/emp/profile(email=${session.employeeEmail})}">Profile</a>
+                    <a th:href="@{/signOut}">Logout</a>
+                </div>
+            </div>
+</header>
+  <script>
+        // JavaScript for toggling dropdown
+        document.getElementById('profile').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
+</html>
