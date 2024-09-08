@@ -20,7 +20,7 @@
     <div class="container">
 
         <h2>Employee Registration</h2>
-        <form th:action="@{/emp/register}" th:object="${employee}" method="POST">
+        <form th:action="@{/hr/register}" th:object="${employee}" method="POST">
             <div class="form-row">
                 <div class="form-group">
                     <label for="first_th:field">First Name:</label>        <span style="color:red" class="error" th:if="${#fields.hasErrors('firstName')}" th:text="${#fields.errors('firstName')}"></span>

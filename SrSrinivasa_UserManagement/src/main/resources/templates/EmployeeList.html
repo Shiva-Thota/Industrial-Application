@@ -3,24 +3,65 @@
 <head>
     <title>Employee List</title>
     <style>
+        /* General Table Styles */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
         table, th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #34495e;
             padding: 8px;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #34495e;
             text-align: left;
         }
         th, td {
             padding: 10px;
             text-align: left;
         }
-        tr:hover {background-color: #f5f5f5;}
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Top Bar Styles */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .filter-container {
+            display: flex;
+            gap: 20px;
+        }
+        .filter-container label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .filter-container input, .filter-container select, .filter-container button {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #34495e;
+        }
+        .filter-container button {
+            background-color: #1ABC9C;
+            color: white;
+            cursor: pointer;
+        }
+        .filter-container button:hover {
+            background-color: #16a085;
+        }
+
+        /* Multi-select Styles */
+        .multi-select {
+            width: 200px;
+            height: 100px;
+        }
 
         /* Pagination */
         .pagination {
@@ -32,12 +73,12 @@
             margin: 0 5px;
             padding: 8px 16px;
             text-decoration: none;
-            background-color: #4CAF50;
+            background-color: #1ABC9C;
             color: white;
             border-radius: 5px;
         }
         .pagination a:hover {
-            background-color: #45a049;
+            background-color: #16a085;
         }
         .disabled {
             pointer-events: none;
@@ -47,25 +88,72 @@
 </head>
 <body>
 
-<h2>Employee List</h2>
+<div th:replace="header"></div>
 
+<h2 style="color: #16a085;text-align:center">Employee List</h2>
+
+<form th:action="@{/hr/EmployeeList}" method="get">
+<!-- Top Bar for Filtering and Searching -->
+<div class="top-bar">
+    <div class="filter-container">
+        <!-- Filter by Department -->
+        <div>
+            <label for="department">Department:</label>
+           <select name="department" id="department" th:value="${selectedDepartment}">
+           <option th:value="${selectedDepartment}" th:selected="${selectedDepartment}"><span th:text="${selectedDepartment}"></span></option>
+           	<option value="">Any Department</option>
+			<option th:each="dept : ${Departments}" th:value="${dept}" th:text="${dept}"></option>
+			</select>
+        </div>
+
+        <!-- Multi-Select Filter for Roles -->
+        <div>
+            <label for="roles">Roles:</label>
+            <select id="roles" name="role" th:value="${selectedRole}">
+                <option th:value="${selectedRole}" th:selected="${selectedRole}"><span th:text="${selectedRole}"></span></option>
+                	<option value="">Any Role</option>
+	            <option th:each="role : ${Roles}"
+	                    th:value="${role}"
+	                    th:text="${role}"></option>
+		  </select>
+        </div>
+
+        <!-- Search by Email -->
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" th:value="${selectedEmail}" placeholder="Enter email">
+        </div>
+		<div>
+            <label for="phoneNumber">Phone:</label>
+            <input type="text" id="phoneNumber" name="phone" th:value="${selectedPhone}" placeholder="Enter phone number">
+        </div>
+        <!-- Submit Button -->
+        <button type="submit">Apply Filters</button>
+    </div>
+</div>
+</form>
+<!-- Employee Table -->
 <table>
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Father</th>
-            <th>Department</th>
-            <th>PhoneNumber</th>
-            <th>Date of Hire</th>
-            <th>Action</th>
+            <th style="color: white;">Email</th>
+            <th style="color: white;">Name</th>
+            <th style="color: white;">Father</th>
+            <th style="color: white;">Department</th>
+            <th style="color: white;">PhoneNumber</th>
+            <th style="color: white;">Gender</th>
+            <th style="color: white;">Date of Hire</th>
+            <th style="color: white;">Action</th>
         </tr>
     </thead>
     <tbody>
         <tr th:each="employee : ${EmployeesList.content}">
-            <td th:text="${employee.firstName}"></td>
+        	<td th:text="${employee.email}"></td>
+            <td><span th:text="${employee.firstName}"></span>  <span th:text="${employee.lastName}"></span></td>
             <td th:text="${employee.father}"></td>
             <td th:text="${employee.department}"></td>
             <td th:text="${employee.phoneNumber}"></td>
+            <td th:text="${employee.gender}"></td>
             <td th:text="${employee.dateOfJoining}"></td>
             <td>
                 <a th:href="@{/hr/profile(email=${employee.email})}">View</a> |
@@ -77,11 +165,9 @@
 
 <!-- Pagination Controls -->
 <div class="pagination">
-    <a th:href="@{/hr/allEmpList(page=${EmployeesList.number - 1})}" th:classappend="${EmployeesList.first}? 'disabled' : ''">Previous</a>
-    
+    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number - 1},department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail},phone=${selectedPhone})}" th:classappend="${EmployeesList.first}? 'disabled' : ''">Previous</a>
     <span>Page <span th:text="${EmployeesList.number + 1}"></span> of <span th:text="${EmployeesList.totalPages}"></span></span>
-    
-    <a th:href="@{/hr/allEmpList(page=${EmployeesList.number + 1})}" th:classappend="${EmployeesList.last}? 'disabled' : ''">Next</a>
+    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number + 1},department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail},phone=${selectedPhone})}" th:classappend="${EmployeesList.last}? 'disabled' : ''">Next</a>
 </div>
 
 </body>

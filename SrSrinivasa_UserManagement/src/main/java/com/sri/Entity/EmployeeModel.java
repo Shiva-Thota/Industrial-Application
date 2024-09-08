@@ -1,5 +1,6 @@
 package com.sri.Entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import jakarta.mail.Multipart;
 import lombok.Data;
 
 @Data
-public class EmployeeModel {
+public class EmployeeModel implements Serializable{
 	
 
 	private String email;

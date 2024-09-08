@@ -1,5 +1,6 @@
 package com.sri.Entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Employee {
+public class Employee implements Serializable{
 	
 	@Id
 	@Column(unique=true)

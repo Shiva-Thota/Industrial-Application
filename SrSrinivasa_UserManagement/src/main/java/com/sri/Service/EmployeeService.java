@@ -16,7 +16,6 @@ public interface EmployeeService extends UserDetailsService{
 
 	String addEmployee(Employee emp);
 	Employee getEmployee(String email) throws EmployeeNotFoundException;
-	List<Employee> getAllEmployee();
 	String updateEmployee(EmployeeModel emp) throws EmployeeNotFoundException;
 	EmployeeModel getEmployeeModel(String email) throws EmployeeNotFoundException;
 
@@ -24,8 +23,7 @@ public interface EmployeeService extends UserDetailsService{
 	String getFullNameWithEmail(String email);
 	List<String> getRolesWithEmail(String email);
 	String setPasswordWithEmail(String email,String oldPswrd,String newPswrd) throws passwordNotMatchedException;
+	Page<Employee> getAllEmployees(String department, String role, String email, String phone, Pageable pageable);
 	
-	Page<Employee> findByDepartment(String department,Pageable pageable);
-	Page<Employee> findByRoles(Set<String> roles,Pageable pageable);
-	Page<Employee> getAllEmployees(Pageable pageable);
+	 
 }

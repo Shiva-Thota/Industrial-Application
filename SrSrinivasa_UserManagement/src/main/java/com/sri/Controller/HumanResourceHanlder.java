@@ -125,24 +125,29 @@ public class HumanResourceHanlder {
 		}
 	
 	//Getting the List of Employees
-	@GetMapping("/allEmpList")
-	public String getallEmployeesList(Map<String,Object> map,@PageableDefault(page = 0,size = 2) Pageable pageable) {
-		Page<Employee> page=empSer.getAllEmployees(pageable);
+	@GetMapping("/EmployeeList")
+	public String getallEmployeesList(
+			@RequestParam(value="department",required = false) String department,
+			@RequestParam(value ="role",required = false ) String role,
+			@RequestParam(value ="email",required = false ) String email,
+			@RequestParam(value ="phone",required = false ) String phone,
+			@PageableDefault(page = 0,size = 1) Pageable pageable,Map<String,Object> map) {
+		if(department==null)
+			department="";
+		if(role==null)
+			role="";
+		if(email==null)
+			email="";
+		if(phone==null)
+			phone="";
+		Page<Employee> page=empSer.getAllEmployees(department,role,email,phone,pageable);
 		map.put("EmployeesList", page);
-		return "EmployeeList";
-	}
-	
-	@GetMapping("/dprtEmpList")
-	public String getDepartmentEmployeesList(@RequestParam("Dprt") String department,Map<String,Object> map,@PageableDefault(page = 0,size = 20) Pageable pageable) {
-		Page<Employee> page=empSer.findByDepartment(department,pageable);
-		map.put("EmployeesList", page);
-		return "EmployeeList";
-	}
-	
-	@GetMapping("/roleEmpList")
-	public String getRoleEmployesList(@RequestParam("roles") Set<String> roles,Map<String,Object> map,@PageableDefault(page = 0,size = 20) Pageable pageable) {
-		Page<Employee> page=empSer.findByRoles(roles,pageable);
-		map.put("EmployeesList", page);
+		map.put("selectedDepartment", department);
+		map.put("selectedRole", role);
+		map.put("selectedEmail", email);
+		map.put("selectedPhone", phone);
+		
+		System.out.println("--------------------------------------------------------------   "+department==null);
 		return "EmployeeList";
 	}
 	

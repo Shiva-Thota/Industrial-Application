@@ -22,31 +22,56 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	@Query("update Employee set addharCard =:adhrCard, address =:addrs,bloodGroup =:blood,dateOfBirth =:dob,"
 			+ "emergencyContact =:emgCont,emergencyPerson =:emgPer,father =:father,firstName =:fname,gender =:gender,"
 			+ "lastName =:lname,maritalStatus =:marital,phoneNumber =:phone,photo =:photo,addharNo =:adhrNo where email =:email")
-	public void updateEmployee(byte[] adhrCard,String addrs,String blood,Date dob,String emgCont,
+	  void updateEmployee(byte[] adhrCard,String addrs,String blood,Date dob,String emgCont,
 			String emgPer,String father,String fname,String gender,String lname,String marital,String phone,
 			byte[] photo,String adhrNo,String email);
 	
 	@Modifying
     @Transactional
 	@Query("update Employee set password =:pswrd where email =:email")
-	public void setPasswordWithEmail(String pswrd,String email);
+	  void setPasswordWithEmail(String pswrd,String email);
 	
 	
 	
 	@Query("Select roles from Employee where email =:email")
-	public List<String> getRolesWithEmail(String email);
+	  List<String> getRolesWithEmail(String email);
 	
 	@Query("Select photo from Employee where email =:email")
-	public byte[] getPhotoWithEmail(String email);
+	  byte[] getPhotoWithEmail(String email);
 			
 	@Query("select CONCAT(firstName,' ',lastName) as name from Employee where email =:email")
-	public String getFullNameWithEmail(String email);
+	  String getFullNameWithEmail(String email);
 	
 	@Query("Select password from Employee where email =:email")
-	public String getPasswordWithEmail(String email);
+	  String getPasswordWithEmail(String email);
 	
-	public Page<Employee> findByDepartment(String department,Pageable pageable);
-
-	public Page<Employee> findByRoles(Set<String> roles,Pageable pageable);
+	  Page<Employee> findByDepartment(String department,Pageable pageable);
 	
+	  Page<Employee> findByPhoneNumber(String phoneNumber,Pageable pageable);
+	  
+	  Page<Employee> findByEmail(String email,Pageable pageable);
+	
+	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles")
+	  Page<Employee> findByRoles(Set<String> roles,Pageable pageable);
+	
+	  Page<Employee> findByAddharNo(String addharNo,Pageable pageable);
+	  
+	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles And department =:department")
+	  Page<Employee> findByDepartmentAndRoles(String department, Set<String> roles,Pageable pageable);
+	
+	  Page<Employee> findByDepartmentAndEmail(String department, String email,Pageable pageable);
+	
+	  Page<Employee> findByDepartmentAndPhoneNumber(String department, String phoneNumber,Pageable pageable);
+	  
+	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles And email =:email")
+	  Page<Employee> findByRolesAndEmail(Set<String> roles, String email,Pageable pageable);
+	
+	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles And phoneNumber =:phoneNumber")
+	  Page<Employee> findByRolesAndPhoneNumber(Set<String> roles, String phoneNumber,Pageable pageable);
+	
+	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles And department =:department And email =:email")
+	  Page<Employee> findByDepartmentAndRolesAndEmail(String department, Set<String> roles, String email,Pageable pageable);
+	
+	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles And phoneNumber =:phoneNumber And department =:department")
+	  Page<Employee> findByDepartmentAndRolesAndPhoneNumber(String department, Set<String> roles, String phoneNumber,Pageable pageable);
 }

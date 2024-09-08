@@ -31,12 +31,6 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	}
 
 	@Override
-	public List<Employee> getAllEmployee() {
-		
-		return (List<Employee>) empRepo.findAll();
-	}
-
-	@Override
 	public String updateEmployee(Employee emp) throws EmployeeNotFoundException {
 		if(empRepo.existsById(emp.getEmail())) {
 			
@@ -94,6 +88,68 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	@Override
 	public Page<Employee> getAllEmployees(Pageable pageable){
 		return empRepo.findAll(pageable);
+	}
+
+	@Override
+	public Page<Employee> findByPhoneNumber(String phoneNumber, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByPhoneNumber(phoneNumber, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByAddharNo(String addharNo, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByAddharNo(addharNo, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByDepartmentAndRoles(String department, Set<String> roles, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByDepartmentAndRoles(department, roles, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByDepartmentAndEmail(String department, String email, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByDepartmentAndEmail(department, email, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByDepartmentAndPhoneNumber(String department, String phoneNumber, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByDepartmentAndPhoneNumber(department, phoneNumber, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByRolesAndEmail(Set<String> roles, String email, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByRolesAndEmail(roles, email, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByRolesAndPhoneNumber(Set<String> roles, String phoneNumber, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByRolesAndPhoneNumber(roles, phoneNumber, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByDepartmentAndRolesAndEmail(String department, Set<String> roles, String email,
+			Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByDepartmentAndRolesAndEmail(department, roles, email, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByDepartmentAndRolesAndPhoneNumber(String department, Set<String> roles,
+			String phoneNumber, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByDepartmentAndRolesAndPhoneNumber(department, roles, phoneNumber, pageable);
+	}
+
+	@Override
+	public Page<Employee> findByEmail(String email, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return empRepo.findByEmail(email, pageable);
 	}
 
 }

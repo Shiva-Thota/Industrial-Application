@@ -68,11 +68,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return empDao.getEmployee(email);
 	}
 
-	@Override
-	public List<Employee> getAllEmployee() {
-		// TODO Auto-generated method stub
-		return empDao.getAllEmployee();
-	}
 
 	@Override
 	public String updateEmployee(EmployeeModel empModel) throws EmployeeNotFoundException {
@@ -136,21 +131,37 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
-	public Page<Employee> findByDepartment(String department, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return empDao.findByDepartment(department, pageable);
+	public Page<Employee> getAllEmployees(String department, String role, String email, String phone,Pageable pageable) {
+		Page<Employee> page=null;
+		
+		if(!email.isBlank()&&department.isBlank()&&role.isBlank()&&phone.isBlank()) {
+			page=empDao.findByEmail(email, pageable);							// only email
+		}else if(!phone.isBlank()&&email.isBlank()&&department.isBlank()&&role.isBlank()) {
+			page=empDao.findByPhoneNumber(phone, pageable);						//only phone
+		}else if(phone.isBlank()&&email.isBlank()&&!department.isBlank()&&role.isBlank()){
+			page=empDao.findByDepartment(department, pageable);					//only department
+		}else if(phone.isBlank()&&email.isBlank()&&department.isBlank()&&!role.isBlank()) {
+			page=empDao.findByRoles(Set.of(role), pageable);					// only role
+		}else if(phone.isBlank()&&email.isBlank()&&!department.isBlank()&&!role.isBlank()) {
+			page=empDao.findByDepartmentAndRoles(department, Set.of(role), pageable);//only dept and role
+		}else if(phone.isBlank()&&!email.isBlank()&&!department.isBlank()&&role.isBlank()) {
+			page=empDao.findByDepartmentAndEmail(department, email, pageable);       // email and dept
+		}else if(!phone.isBlank()&&email.isBlank()&&!department.isBlank()&&role.isBlank()) {
+			page=empDao.findByDepartmentAndPhoneNumber(department, phone, pageable);  // dept and phone
+		} else if(phone.isBlank()&&!email.isBlank()&&department.isBlank()&&!role.isBlank()) {
+			page=empDao.findByRolesAndEmail(Set.of(role), email, pageable);			  //role and email
+		}else if(!phone.isBlank()&&email.isBlank()&&department.isBlank()&&!role.isBlank()) {
+			page=empDao.findByRolesAndPhoneNumber(Set.of(role), phone, pageable);	  //role and phone
+		}else if(phone.isBlank()&&!email.isBlank()&&!department.isBlank()&&!role.isBlank()) {
+			page=empDao.findByDepartmentAndRolesAndEmail(department, Set.of(role), email, pageable); //dept, role and email
+		}else if(!phone.isBlank()&&email.isBlank()&&!department.isBlank()&&!role.isBlank()) {
+			page=empDao.findByDepartmentAndRolesAndPhoneNumber(department, Set.of(role), phone, pageable); //dept, role and phone
+		}else{
+			page=empDao.getAllEmployees(pageable); // All emp
+		}
+		return page;
 	}
 
-	@Override
-	public Page<Employee> findByRoles(Set<String> roles, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return empDao.findByRoles(roles, pageable);
-	}
-
-	@Override
-	public Page<Employee> getAllEmployees(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return empDao.getAllEmployees(pageable);
-	}
+	
 
 }
