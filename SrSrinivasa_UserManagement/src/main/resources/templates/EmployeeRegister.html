@@ -20,6 +20,7 @@
     <div class="container">
 
         <h2>Employee Registration</h2>
+        <span style="color:red" th:text="${Employee_email_already_exist}"></span>
         <form th:action="@{/hr/register}" th:object="${employee}" method="POST">
             <div class="form-row">
                 <div class="form-group">

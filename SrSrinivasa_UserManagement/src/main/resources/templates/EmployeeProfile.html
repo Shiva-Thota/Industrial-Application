@@ -34,6 +34,7 @@
             <p><strong>Member Since:</strong> <span th:text="${EmployeeProfile.dateOfJoining}"></span></p>
         </div>
 
+<div th:if="${session.employeeEmail == EmployeeProfile.email}">
         <!-- Profile Actions -->
         <div class="profile-actions">
             <a th:href="@{/user/updateEmp}">Edit Profile</a>
@@ -41,7 +42,7 @@
             <a th:href="@{/signOut}">Logout</a>
         </div>
     </div>
-
+</div>
     <!-- Footer -->
     <footer>
         <p>&copy; 2024 Industrial Company - All rights reserved.</p>

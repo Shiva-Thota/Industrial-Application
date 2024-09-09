@@ -45,6 +45,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	@Query("Select password from Employee where email =:email")
 	  String getPasswordWithEmail(String email);
 	
+	@Query("Select enabled from Employee where email =:email")
+		boolean isEmployeeEnabled(String email);
+	
 	  Page<Employee> findByDepartment(String department,Pageable pageable);
 	
 	  Page<Employee> findByPhoneNumber(String phoneNumber,Pageable pageable);

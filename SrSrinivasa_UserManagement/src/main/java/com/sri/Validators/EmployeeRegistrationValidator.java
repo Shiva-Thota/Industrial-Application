@@ -3,14 +3,19 @@ package com.sri.Validators;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.sri.Entity.Employee;
+import com.sri.Service.EmployeeService;
 
 @Component
 public class EmployeeRegistrationValidator implements Validator{
+	
+	@Autowired
+	EmployeeService empSer;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -57,6 +62,8 @@ public class EmployeeRegistrationValidator implements Validator{
 			errors.rejectValue("email", "emp.email.null");
 		}else if(!isValidEmail(emp.getEmail())) {
 			errors.rejectValue("email", "emp.email.format");
+		}else if(empSer.isEmployeeExist(emp.getEmail())) {
+			errors.rejectValue("email", "emp.email.alreadyExist");
 		}
 		
 		if(emp.getPhoneNumber()==null ||emp.getPhoneNumber().isBlank()) {

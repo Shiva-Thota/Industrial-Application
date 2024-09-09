@@ -1,5 +1,6 @@
 package com.sri.Persistance;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -11,15 +12,20 @@ import com.sri.Exceptions.EmployeeNotFoundException;
 
  public interface EmployeeDAO {
 
-	String addEmployee(Employee emp);
+	String addEmployee(Employee emp) throws SQLException;
 	Employee getEmployee(String email) throws EmployeeNotFoundException;
 	String updateEmployee(Employee emp) throws EmployeeNotFoundException;
+	String deleteEmployee(String email) throws EmployeeNotFoundException;
+	
 	List<String> getRolesWithEmail(String email);
 	String getPasswordWithEmail(String email);
 	
 	byte[] getPhotoWithEmail(String email);
 	String getFullNameWithEmail(String email);
 	String setPasswordWithEmail(String password,String email);
+	boolean isEmployeeExist(String email);
+	
+	boolean isEmployeeEnabled(String email);
 	
 	  Page<Employee> findByDepartment(String department,Pageable pageable);
 	

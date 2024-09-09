@@ -1,25 +1,29 @@
 package com.sri.Persistance;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.sri.Entity.Employee;
 import com.sri.Exceptions.EmployeeNotFoundException;
 import com.sri.Repository.EmployeeRepository;
 
-@Component
+@Repository
 public class EmployeeDAOImpl implements EmployeeDAO{
 
 	@Autowired
 	EmployeeRepository empRepo;
 	
 	@Override
-	public String addEmployee(Employee emp) {
+	public String addEmployee(Employee emp) throws SQLException {
+		if(empRepo.existsById(emp.getEmail())) {
+			throw new SQLException();
+		}
 		String msg=empRepo.save(emp).getEmail();
 		return "Employee added into Database with email : "+msg;
 	}
@@ -48,41 +52,53 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	public List<String> getRolesWithEmail(String email) {
 		return empRepo.getRolesWithEmail(email);
 	}
+	
+	@Override
+	public String deleteEmployee(String email) throws EmployeeNotFoundException {
+		if(empRepo.existsById(email)) {
+			empRepo.deleteById(email);
+			return email+" Deleted ";
+		}else {
+			throw new EmployeeNotFoundException("Employee Not Found in Database");
+		}
+		
+	}
+	
 
 	@Override
 	public String getPasswordWithEmail(String email) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.getPasswordWithEmail(email);
 	}
 
 	@Override
 	public byte[] getPhotoWithEmail(String email) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.getPhotoWithEmail(email);
 	}
 
 	@Override
 	public String getFullNameWithEmail(String email) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.getFullNameWithEmail(email);
 	}
 
 	@Override
 	public String setPasswordWithEmail(String password,String email) {
-		// TODO Auto-generated method stub
+		 
 		empRepo.setPasswordWithEmail(password,email);
 		return "Password Updated";
 	}
 
 	@Override
 	public Page<Employee> findByDepartment(String department, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByDepartment(department, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByRoles(Set<String> roles, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByRoles(roles, pageable);
 	}
 	@Override
@@ -92,64 +108,75 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 
 	@Override
 	public Page<Employee> findByPhoneNumber(String phoneNumber, Pageable pageable) {
-		// TODO Auto-generated method stub
 		return empRepo.findByPhoneNumber(phoneNumber, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByAddharNo(String addharNo, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByAddharNo(addharNo, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByDepartmentAndRoles(String department, Set<String> roles, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByDepartmentAndRoles(department, roles, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByDepartmentAndEmail(String department, String email, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByDepartmentAndEmail(department, email, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByDepartmentAndPhoneNumber(String department, String phoneNumber, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByDepartmentAndPhoneNumber(department, phoneNumber, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByRolesAndEmail(Set<String> roles, String email, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByRolesAndEmail(roles, email, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByRolesAndPhoneNumber(Set<String> roles, String phoneNumber, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByRolesAndPhoneNumber(roles, phoneNumber, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByDepartmentAndRolesAndEmail(String department, Set<String> roles, String email,
 			Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByDepartmentAndRolesAndEmail(department, roles, email, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByDepartmentAndRolesAndPhoneNumber(String department, Set<String> roles,
 			String phoneNumber, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByDepartmentAndRolesAndPhoneNumber(department, roles, phoneNumber, pageable);
 	}
 
 	@Override
 	public Page<Employee> findByEmail(String email, Pageable pageable) {
-		// TODO Auto-generated method stub
+		 
 		return empRepo.findByEmail(email, pageable);
+	}
+
+	@Override
+	public boolean isEmployeeExist(String email) {
+		 
+		return empRepo.existsById(email);
+	}
+
+	@Override
+	public boolean isEmployeeEnabled(String email) {
+		// TODO Auto-generated method stub
+		return empRepo.isEmployeeEnabled(email);
 	}
 
 }

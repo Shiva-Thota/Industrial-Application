@@ -1,5 +1,6 @@
 package com.sri.Service;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeModel;
@@ -25,7 +26,7 @@ import com.sri.Persistance.EmployeeDAO;
 import com.sri.mail.MailSender;
 import com.sri.utils.EmployeeUtils;
 
-@Component
+@Service
 public class EmployeeServiceImpl implements EmployeeService{
 	
 	@Autowired
@@ -41,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	PasswordEncoder passwordEncoder;
 
 	@Override
-	public String addEmployee(Employee employee) {
+	public String addEmployee(Employee employee) throws SQLException {
 		Employee emp=employee;
 		
 		//setting todays date
@@ -64,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public Employee getEmployee(String email) throws EmployeeNotFoundException {
-		// TODO Auto-generated method stub
+		 
 		return empDao.getEmployee(email);
 	}
 
@@ -90,32 +91,33 @@ public class EmployeeServiceImpl implements EmployeeService{
 		//Collecting password and roles from Database
 		String password=empDao.getPasswordWithEmail(username);
 		List<String> roles=empDao.getRolesWithEmail(username);
-		System.out.println(password+"              "+roles+"         "+username);
 
 		Set<SimpleGrantedAuthority> authorities=new HashSet<SimpleGrantedAuthority>();
 		//generating SimpleGranted Authority from roles set
 		roles.stream().forEach(role->{
 			authorities.add(new SimpleGrantedAuthority(role));
 		});
-		User user=new User(username, password, authorities);
-		return user;
+		boolean isEnabled=empDao.isEmployeeEnabled(username);
+		User usr=new User(username, password, isEnabled, true, true, true, authorities);
+		//User user=new User(username, password, authorities);
+		return usr;
 	}
 
 	@Override
 	public byte[] getPhotoWithEmail(String email) {
-		// TODO Auto-generated method stub
+		 
 		return empDao.getPhotoWithEmail(email);
 	}
 
 	@Override
 	public String getFullNameWithEmail(String email) {
-		// TODO Auto-generated method stub
+		 
 		return empDao.getFullNameWithEmail(email);
 	}
 
 	@Override
 	public List<String> getRolesWithEmail(String email) {
-		// TODO Auto-generated method stub
+		 
 		return empDao.getRolesWithEmail(email);
 	}
 
@@ -160,6 +162,18 @@ public class EmployeeServiceImpl implements EmployeeService{
 			page=empDao.getAllEmployees(pageable); // All emp
 		}
 		return page;
+	}
+
+	@Override
+	public boolean isEmployeeExist(String email) {
+		 
+		return empDao.isEmployeeExist(email);
+	}
+
+	@Override
+	public String deleteEmployee(String email) throws EmployeeNotFoundException {
+		 
+		return empDao.deleteEmployee(email);
 	}
 
 	

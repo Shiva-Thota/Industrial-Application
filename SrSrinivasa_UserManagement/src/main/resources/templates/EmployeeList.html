@@ -84,6 +84,24 @@
             pointer-events: none;
             background-color: #ddd;
         }
+
+        /* Download buttons */
+        .download-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .download-buttons a {
+            margin-left: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+        }
+        .download-buttons a:hover {
+            background-color: #2980b9;
+        }
     </style>
 </head>
 <body>
@@ -99,11 +117,11 @@
         <!-- Filter by Department -->
         <div>
             <label for="department">Department:</label>
-           <select name="department" id="department" th:value="${selectedDepartment}">
-           <option th:value="${selectedDepartment}" th:selected="${selectedDepartment}"><span th:text="${selectedDepartment}"></span></option>
-           	<option value="">Any Department</option>
-			<option th:each="dept : ${Departments}" th:value="${dept}" th:text="${dept}"></option>
-			</select>
+            <select name="department" id="department" th:value="${selectedDepartment}">
+                <option th:value="${selectedDepartment}" th:selected="${selectedDepartment}"><span th:text="${selectedDepartment}"></span></option>
+                <option value="">Any Department</option>
+                <option th:each="dept : ${Departments}" th:value="${dept}" th:text="${dept}"></option>
+            </select>
         </div>
 
         <!-- Multi-Select Filter for Roles -->
@@ -111,11 +129,11 @@
             <label for="roles">Roles:</label>
             <select id="roles" name="role" th:value="${selectedRole}">
                 <option th:value="${selectedRole}" th:selected="${selectedRole}"><span th:text="${selectedRole}"></span></option>
-                	<option value="">Any Role</option>
-	            <option th:each="role : ${Roles}"
-	                    th:value="${role}"
-	                    th:text="${role}"></option>
-		  </select>
+                <option value="">Any Role</option>
+                <option th:each="role : ${Roles}"
+                        th:value="${role}"
+                        th:text="${role}"></option>
+            </select>
         </div>
 
         <!-- Search by Email -->
@@ -123,15 +141,24 @@
             <label for="email">Email:</label>
             <input type="text" id="email" name="email" th:value="${selectedEmail}" placeholder="Enter email">
         </div>
-		<div>
+
+        <div>
             <label for="phoneNumber">Phone:</label>
             <input type="text" id="phoneNumber" name="phone" th:value="${selectedPhone}" placeholder="Enter phone number">
         </div>
+
         <!-- Submit Button -->
         <button type="submit">Apply Filters</button>
     </div>
 </div>
 </form>
+<div th:if="${EmployeesList.hasContent()}">
+	<!-- Download Buttons for PDF and Excel -->
+	<div class="download-buttons">
+	    <a th:href="@{/hr/EmployeeList/download(type=pdf,department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}">Download PDF</a>
+	    <a th:href="@{/hr/EmployeeList/download(type=excel,department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}">Download Excel</a>
+	</div>
+</div>
 <!-- Employee Table -->
 <table>
     <thead>
@@ -143,18 +170,24 @@
             <th style="color: white;">PhoneNumber</th>
             <th style="color: white;">Gender</th>
             <th style="color: white;">Date of Hire</th>
+            <th style="color: white;">Roles</th>
             <th style="color: white;">Action</th>
         </tr>
     </thead>
     <tbody>
         <tr th:each="employee : ${EmployeesList.content}">
-        	<td th:text="${employee.email}"></td>
-            <td><span th:text="${employee.firstName}"></span>  <span th:text="${employee.lastName}"></span></td>
+            <td th:text="${employee.email}"></td>
+            <td><span th:text="${employee.firstName}"></span> <span th:text="${employee.lastName}"></span></td>
             <td th:text="${employee.father}"></td>
             <td th:text="${employee.department}"></td>
             <td th:text="${employee.phoneNumber}"></td>
             <td th:text="${employee.gender}"></td>
             <td th:text="${employee.dateOfJoining}"></td>
+            <td>
+                <div th:each="role : ${employee.roles}">
+                    &nbsp;<span th:text="${role}"></span><br>
+                </div>
+            </td>
             <td>
                 <a th:href="@{/hr/profile(email=${employee.email})}">View</a> |
                 <a th:href="@{/hr/updateEmp(email=${employee.email})}">Edit</a>
@@ -162,12 +195,16 @@
         </tr>
     </tbody>
 </table>
-
+<div th:if="${!EmployeesList.hasContent()}">
+<h1 style="color: red;text-align:center">NO EMPLOYEE FOUND</h1>
+</div>
+<div th:if="${EmployeesList.hasContent()}">
 <!-- Pagination Controls -->
 <div class="pagination">
-    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number - 1},department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail},phone=${selectedPhone})}" th:classappend="${EmployeesList.first}? 'disabled' : ''">Previous</a>
+    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number - 1}, department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}" th:classappend="${EmployeesList.first}? 'disabled' : ''">Previous</a>
     <span>Page <span th:text="${EmployeesList.number + 1}"></span> of <span th:text="${EmployeesList.totalPages}"></span></span>
-    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number + 1},department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail},phone=${selectedPhone})}" th:classappend="${EmployeesList.last}? 'disabled' : ''">Next</a>
+    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number + 1}, department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}" th:classappend="${EmployeesList.last}? 'disabled' : ''">Next</a>
+</div>
 </div>
 
 </body>

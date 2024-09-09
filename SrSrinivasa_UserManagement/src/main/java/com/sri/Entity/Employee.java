@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.CollectionTable;
@@ -18,6 +20,8 @@ import lombok.Data;
 
 @Entity
 @Data
+@SQLDelete(sql="update Employee set enabled=false where email=?")
+@Where(clause="enabled<>false")
 public class Employee implements Serializable{
 	
 	@Id
