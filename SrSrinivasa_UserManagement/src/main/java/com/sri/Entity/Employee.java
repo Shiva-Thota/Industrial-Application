@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,6 +17,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Data;
 
 @Entity
@@ -62,6 +65,11 @@ public class Employee implements Serializable{
 			joinColumns=@JoinColumn(name = "email",referencedColumnName = "email"))
 	@Column(name = "role")
 	private Set<String> roles;
+	
+	@UpdateTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modify_date")
+	private Date modifyDate;
 	
 	
 }

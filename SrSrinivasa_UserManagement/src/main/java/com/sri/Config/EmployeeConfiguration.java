@@ -3,7 +3,6 @@ package com.sri.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.servlet.view.BeanNameViewResolver;
 
+import com.sri.Filters.JWTRequestFilter;
 import com.sri.Service.EmployeeService;
 
 @Configuration
@@ -24,8 +23,11 @@ public class EmployeeConfiguration {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JWTRequestFilter jwtFilter;
     
-     @Bean
+    @Bean
      AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = 
         		http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -33,8 +35,23 @@ public class EmployeeConfiguration {
             						.passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
+//	@Bean
+//	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfigurer) throws Exception {
+//		return authConfigurer.getAuthenticationManager();
+//	}
+//	
+//	
+//	@Bean
+//	AuthenticationProvider authenticationProvider(AuthenticationProvider prvdr) {
+//		DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+//		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+//		daoAuthenticationProvider.setUserDetailsService(employeeService);
+//		return prvdr;
+//	}
 	
-    @Bean
+   //For Statefull Authentication
+     
+     @Bean
     SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
     	http.authorizeHttpRequests(req->
     		req.requestMatchers("/","/user/loginPage","/images/**","/css/**","/hr/register").permitAll()
@@ -50,11 +67,16 @@ public class EmployeeConfiguration {
     	return http.build();
     }
     
-    @Bean
-	BeanNameViewResolver viewresolver() {
-		BeanNameViewResolver res=new BeanNameViewResolver();
-		res.setOrder(Ordered.HIGHEST_PRECEDENCE);
-		return res;
-	}
+//	@Bean
+//    SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
+//    	http.authorizeHttpRequests(req->
+//    		req.requestMatchers("/","/user/loginPage","/images/**","/css/**","/hr/register").permitAll()
+//    		.requestMatchers("/hr/**").hasAnyAuthority("ADMIN","HUMAN_RESOURCE")
+//    		.anyRequest().authenticated()
+//    	).csrf(csrf->csrf.disable())
+//    	.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//    	.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
+//    	return http.build();
+//    }
         
 }

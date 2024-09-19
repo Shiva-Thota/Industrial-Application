@@ -137,7 +137,7 @@ public class HumanResourceHanlder {
 			@RequestParam(value ="role",required = false ) String role,
 			@RequestParam(value ="email",required = false ) String email,
 			@RequestParam(value ="phone",required = false ) String phone,
-			@PageableDefault(page = 0,size = 50) Pageable pageable,Map<String,Object> map) {
+			@PageableDefault(page = 0,size = 20) Pageable pageable,Map<String,Object> map) {
 			
 			if(department==null)
 				department="";
@@ -163,7 +163,7 @@ public class HumanResourceHanlder {
 			@RequestParam(value ="email",required = false ) String email,
 			@RequestParam(value ="phone",required = false ) String phone,
 			@RequestParam(value ="type",required = false ) String type,
-			@PageableDefault(page = 0,size = 1) Pageable pageable,Map<String,Object> map) {
+			@PageableDefault(page = 0,size = 50) Pageable pageable,Map<String,Object> map) {
 			if(department==null)
 				department="";
 			if(role==null)

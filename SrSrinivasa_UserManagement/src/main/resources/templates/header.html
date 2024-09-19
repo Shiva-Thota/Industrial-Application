@@ -1,5 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">  
-<style>/* Header */
+<style>
+/* Header */
 header {
     grid-area: header;
     display: flex;
@@ -9,7 +10,6 @@ header {
     color: white;
     padding: 0 20px;
     height: 90px; /* Increase height of the header */
-    
 }
 
 header .logo {
@@ -34,13 +34,22 @@ header .profile {
     cursor: pointer;
 }
 
+header .profile .user-info {
+    display: flex;
+    flex-direction: column; /* Stack username and roles vertically */
+    align-items: flex-start; /* Align items to the left */
+}
+
 header .profile span {
     margin-right: 20px;
+    font-size: 18px; /* Font size for the user info */
+    font-weight: bold;
 }
 
 header .user-info {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* Stack the items vertically */
+    align-items: flex-start; /* Align content to the left */
 }
 
 header .user-info img {
@@ -48,6 +57,11 @@ header .user-info img {
     width: auto;
     border-radius: 40%;
     margin-right: 10px;
+}
+
+header .roles {
+    font-size: 14px; /* Smaller font size for roles */
+    color: #bdc3c7; /* Lighter color for roles */
 }
 
 header .dropdown {
@@ -87,34 +101,44 @@ header .dropdown a {
 header .dropdown a:hover {
     background-color: #16a085;
     transform: scale(1.05); /* Slightly increases size on hover */
-}</style>
+}
+</style>
 <header>
    <div class="logo">
-                <!-- Industry Logo -->
         	<a th:href="@{/Dashboard/}"><img th:src="@{/images/logo.png}"></a>
-                <h1>Sri Srinivasa Industries</h1>
+            <h1>Sri Srinivasa Industries</h1>
+    </div>
+
+    <div class="profile" id="profile">
+        <span th:text="${#dates.format(#dates.createNow(), 'HH:mm - dd MMM yyyy')}" style="font-weight: normal;"></span>
+        <div class="user-info">
+            <span th:text="${session.employeeUserName}" style="font-weight: bold; font-size: 20px;"></span>
+            <div class="roles">
+                <span th:each="role : ${session.employeeRoles}"><span th:text="${role}"></span>&nbsp;&nbsp;</span>
             </div>
-            <div class="profile" id="profile">
-                <span th:text="${#dates.format(#dates.createNow(), 'HH:mm - dd MMM yyyy')}" ></span>
-                <div class="user-info">
-                   <img th:src="@{'data:image/jpeg;base64,'+${session.employeePhoto}}" alt="Employee Image"/>
-                    <span th:text="${session.employeeUserName}"></span>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown" id="dropdown">
+            <p><strong><span th:text="${session.employeeUserName}"></span></strong></p>
+            <p style="font-weight: normal;">Email: <span th:text="${session.employeeEmail}"></span></p>
+            <p style="font-weight: normal;">Roles:
+                <div th:each="role : ${session.employeeRoles}" style="font-weight: strong;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${role}"></span>
                 </div>
-                <!-- Dropdown Menu -->
-                <div class="dropdown" id="dropdown">
-                    <p><strong><span th:text="${session.employeeUserName}"></span></strong></p>
-                    <p>Email:<span th:text="${session.employeeEmail}"></span></p>
-                    <p>Roles:<div th:each="role : ${session.employeeRoles}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${role}"></span></div></p>
-                    <a th:href="@{/user/profile}">Profile</a>
-                    <a th:href="@{/signOut}">Logout</a>
-                </div>
-            </div>
+            </p>
+            <a th:href="@{/user/profile}">Profile</a>
+            <a th:href="@{/signOut}">Logout</a>
+        </div>
+    </div>
 </header>
-  <script>
-        // JavaScript for toggling dropdown
-        document.getElementById('profile').addEventListener('click', function() {
-            var dropdown = document.getElementById('dropdown');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        });
-    </script>
+
+<script>
+    // JavaScript for toggling dropdown
+    document.getElementById('profile').addEventListener('click', function() {
+        var dropdown = document.getElementById('dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+</script>
+
 </html>
