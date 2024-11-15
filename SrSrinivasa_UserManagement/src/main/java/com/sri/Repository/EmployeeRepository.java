@@ -29,9 +29,21 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	@Modifying
     @Transactional
 	@Query("update Employee set password =:pswrd where email =:email")
-	  void setPasswordWithEmail(String pswrd,String email);
+    void setPasswordWithEmail(String pswrd,String email);
 	
+	@Modifying
+	@Transactional
+	@Query("update Employee set registeredTeam =:registeredTeam where email =:email")
+	void setregisteredTeamWithEmail(String registeredTeam,String email);
 	
+	@Modifying
+	@Transactional
+	@Query("update Employee set registeredTeam = null where email =:email")
+	void setRemoveRegisteredTeamWithEmail(String email);
+
+	
+	@Query("select email from Employee where department =:department")
+	List<String> findEmailByDepartment(String department);
 	
 	@Query("Select roles from Employee where email =:email")
 	  List<String> getRolesWithEmail(String email);
@@ -56,6 +68,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	
 	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles")
 	  Page<Employee> findByRoles(Set<String> roles,Pageable pageable);
+	  
+	  @Query("Select email from Employee e JOIN e.roles r where r IN :roles")
+	  List<String> getEmailsBasedOnRole(Set<String> roles);
+	  
+	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles")
+	  List<Employee> findEmployeesByRoles(Set<String> roles);
+	
 	
 	  Page<Employee> findByAddharNo(String addharNo,Pageable pageable);
 	  
@@ -77,4 +96,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	
 	  @Query("SELECT e FROM Employee e JOIN e.roles r WHERE r IN :roles And phoneNumber =:phoneNumber And department =:department")
 	  Page<Employee> findByDepartmentAndRolesAndPhoneNumber(String department, Set<String> roles, String phoneNumber,Pageable pageable);
+
+	  
 }

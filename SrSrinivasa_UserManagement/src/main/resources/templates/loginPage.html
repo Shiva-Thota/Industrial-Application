@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/index.css" th:href="@{/css/loginStyles.css}" />
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="logo">
+        <a th:href="@{/sri/}"><img th:src="@{/images/logo.png}" alt="logo"></a>
+        <h1>Sri Srinivasa Industries</h1>
+    </div>
+</header>
+
+<!-- Login Container -->
+<div class="login-container">
+    <div class="login-box">
+        <h2>Login</h2>
+        <span id="error-msg" style="color: red; display: none;">Invalid Credentials</span>
+        <span id="success-msg" style="color: lightblue; display: none;">Successfully Logged In</span>
+
+        <!-- Login Form -->
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me">
+                <label for="remember-me">Remember Me</label>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn-login">Login</button>
+            </div>
+            <div class="forgot-password">
+                <a href="#">Forgot Password?</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// JavaScript function to handle form submission via Fetch API
+document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent form's default submission behavior
+
+    // Get form input values
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Make the login request via Fetch
+    try {
+        const response = await fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const token = data.accessToken; // Extract the JWT token from the response
+
+            console.log("Token : ", token);
+            // Store the token in localStorage (or use cookies if preferred)
+            localStorage.setItem('jwtToken', token);
+
+            // Display success message and redirect to a new page if necessary
+            document.getElementById('success-msg').style.display = 'block';
+            document.getElementById('error-msg').style.display = 'none';
+
+            // Optionally, redirect to the home page or dashboard
+            window.location.href = '/sri/'; // Adjust the redirect path as needed
+
+        } else {
+            // Handle login failure (invalid credentials)
+            document.getElementById('error-msg').style.display = 'block';
+            document.getElementById('success-msg').style.display = 'none';
+        }
+
+    } catch (error) {
+        console.error('Error during login:', error);
+        // Handle error (network issues, etc.)
+        document.getElementById('error-msg').textContent = 'Error: Unable to login';
+        document.getElementById('error-msg').style.display = 'block';
+    }
+});
+</script>
+
+</body>
+</html>

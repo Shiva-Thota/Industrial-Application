@@ -31,10 +31,10 @@
                     <div class="card">
                     	<h3>Employees List</h3><br>
                         <p>Full Employees list</p><br>
-                        <a th:href="@{/hr/EmployeeList}" class="button-link" >View Details</a>
+                        <a th:href="@{/employee/hr/EmployeeList}" class="button-link" >View Details</a>
                     </div>
                     <div class="card">
-                    	<form th:action="@{/hr/deleteEmp}" method="get">
+                    	<form th:action="@{/employee/hr/deleteEmp}" method="get">
                     		<h2 th:text="${Emp_Deleted}" style="color:red"></h2>
 	                        <h3>Delete Employee</h3><br>
 	                        <p>Enter the email</p>
@@ -45,9 +45,9 @@
                     </div>
                     <div class="card">
                         <h3>Register Employee</h3>
-                   		<h2 th:text="${Employee_Added}" style="color:blue"></h2><br>
+                   		<h2 th:text="${Employee_Added}" style="color:Green"></h2><br>
                         <p>Entering the new Employee Records into database</p>
-                        <a th:href="@{/hr/register}" class="button-link" >Register</a>
+                        <a th:href="@{/employee/hr/register}" class="button-link" >Register</a>
                     </div>
                      
                 </div>

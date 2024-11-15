@@ -27,8 +27,10 @@ import com.sri.Service.EmployeeService;
 import com.sri.Validators.EmployeeRegistrationValidator;
 import com.sri.Validators.EmployeeUpdateFormValidator;
 
+import jakarta.mail.MessagingException;
+
 @Controller
-@RequestMapping("/hr")
+@RequestMapping("/employee/hr")
 public class HumanResourceHanlder {
 	
 	@Autowired
@@ -39,6 +41,9 @@ public class HumanResourceHanlder {
 	
 	@Autowired 
 	EmployeeUpdateFormValidator employeeUpdateFormValidator;
+	
+	@Value("${gateway.url}")
+	String gateWayUrl;
 	
 	@Value("${modelAttribute.Departments}")
 	List<String> Departments;
@@ -69,13 +74,17 @@ public class HumanResourceHanlder {
 		
 		String msg="";
 		try {
-			msg = empSer.addEmployee(employee);
+			try {
+				msg = empSer.addEmployee(employee);
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
 		} catch (SQLException e) {
 			redirectAttribute.addFlashAttribute("Employee_email_already_exist","Employee_email_already_exist :"+employee.getEmail());
-			return "redirect:/hr/register";
+			return "redirect:"+gateWayUrl+"/employee/hr/register";
 		}
 		redirectAttribute.addFlashAttribute("Employee_Added", msg);
-		return "redirect:/hr/empDashboard";
+		return "redirect:"+gateWayUrl+"/employee/hr/empDashboard";
 	}
 	
 	
@@ -98,7 +107,7 @@ public class HumanResourceHanlder {
 			if(employeeUpdateFormValidator.supports(EmployeeModel.class)) {
 				employeeUpdateFormValidator.validate(employeeModel, error);
 				if(error.hasErrors()) {
-					System.out.println(error.getAllErrors());
+					
 					return "EmployeeUpdate";
 				}
 			}
@@ -107,7 +116,7 @@ public class HumanResourceHanlder {
 		} catch (EmployeeNotFoundException e) {
 			redirectAttribute.addFlashAttribute("EmpNotFound", "Employee Not Found in database");
 		}
-		return "redirect:/Dashboard/";
+		return "redirect:"+gateWayUrl+"/employee/Dashboard/";
 	}
 	
 	//Profile Page

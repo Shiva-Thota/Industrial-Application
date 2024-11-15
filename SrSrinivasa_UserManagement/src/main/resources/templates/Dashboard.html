@@ -1,262 +1,153 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
- xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorator="layouts/default"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Dashboard</title>
-	 <link rel="stylesheet" type="text/css" media="all"
-     href="/css/index.css" th:href="@{/css/Dashboard.css}" />  
+    <title>Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-   
-</head>
-<body>
-<div th:replace="header"></div>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <h1>Dashboard</h1>
-        </header>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
 
-        <!-- Sidebar -->
-        <nav class="sidebar">
-           <ul>
-                <div sec:authorize="hasAnyAuthority('ADMIN','HUMAN_RESOURCE')" > 
-                <li><a href="#" class="nav-link" data-section="overview">Dashboard Overview</a></li>
-                </div> 
-                <div sec:authorize="hasAnyAuthority('ADMIN','PRODUCTION_MANAGER')" > 
-                <li><a href="#" class="nav-link" data-section="production">Production Monitoring</a></li>
-                </div> 
-                <div sec:authorize="hasAnyAuthority('ADMIN','MAINTAINANCE_HEAD')" > 
-                <li><a href="#" class="nav-link" data-section="maintenance">Maintenance</a></li>
-                </div> 
-                <div sec:authorize="hasAnyAuthority('ADMIN','QUALITY_MANAGER')" > 
-                <li><a href="#" class="nav-link" data-section="equipment">Quality Control</a></li>
-                </div> 
-                <div sec:authorize="hasAnyAuthority('ADMIN','INVENTORY_MANAGER')" > 
-                <li><a href="#" class="nav-link" data-section="inventory">Inventory</a></li>
-                </div> 
-                <div sec:authorize="hasAnyAuthority('ADMIN','QUALITY_MANAGER')" > 
-                <li><a href="#" class="nav-link" data-section="reports">Reports & Analytics</a></li>
-                </div> 
-                <div sec:authorize="hasAnyAuthority('ADMIN')" > 
-                <li><a href="#" class="nav-link" data-section="settings">Settings</a></li>
-                </div> 
-       
-           	 </ul>
-        </nav>
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: 10px 1fr 50px;
+            height: 100vh;
+            grid-template-areas:
+                "header header"
+                "sidebar main"
+                "footer footer";
+        }
 
-        <!-- Main Content -->
-        <main>
-            <!-- Sections to dynamically show/hide -->
- 		<div sec:authorize="hasAnyAuthority('ADMIN','HUMAN_RESOURCE')" >     
-            <section id="overview" class="section">
-                <h2>HR Management Overview</h2>
-                <div class="card-container">
-                    <div class="card">
-                        <h3>Manage Employee Records</h3>
-                        <p>Records include roles, departments, and payroll integration.</p>
-                        <a th:href="@{/hr/empDashboard}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Recruitment and Onboarding</h3>
-                        <p>Oversees recruitment, onboarding, and offboarding processes.</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Compliance Management</h3>
-                        <p>Ensures compliance with safety, environmental, and regulatory standards.</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Audits and Compliance Reports</h3>
-                        <p>Conducts audits and prepares compliance reports.</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Attendance and Payroll</h3>
-                        <p>Tracks attendance, manages payroll, and handles employee performance reviews.</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Budget Collaboration</h3>
-                        <p>Works closely with the Finance Manager on budget-related matters concerning HR.</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                </div>
-            </section>
-		</div><!-- Admin ,HR -->
-        <div sec:authorize="hasAnyAuthority('ADMIN','PRODUCTION_MANAGER')" > 
-            <section id="production" class="section hidden">
-                 <h2>Production Monitoring</h2>
-                <div class="card-container">
-                    <div class="card">
-                        <h3>Total Production Output</h3>
-                        <p>5,000 units</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Production Efficiency</h3>
-                        <p>85% efficiency</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Production Downtime</h3>
-                        <p>2 hours last month</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Machine Utilization</h3>
-                        <p>90% utilization</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Shift Performance</h3>
-                        <p>Day shift: 95% performance<br>Night shift: 80% performance</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Production Forecast</h3>
-                        <p>Projected output for next month: 6,000 units</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                </div>
-            </section>
-		</div><!-- ADMIN, PRODUCTION_MANAGER -->
-		<div sec:authorize="hasAnyAuthority('ADMIN','MAINTAINANCE_HEAD')" > 
-            <section id="maintenance" class="section hidden">
-                 <h2>Maintenance</h2>
-                <div class="card-container">
-                    <div class="card">
-                        <h3>Upcoming Maintenance</h3>
-                        <p>Scheduled for next week</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Maintenance Requests</h3>
-                        <p>10 pending requests</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Completed Maintenance</h3>
-                        <p>15 requests completed this month</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Maintenance Costs</h3>
-                        <p>$5,000 last month</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Equipment Health</h3>
-                        <p>85% of equipment in good condition</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Maintenance Trends</h3>
-                        <p>Increased requests during summer</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                </div>
-            </section>
-		</div><!-- ADMIN, MAINTAINANACE -->
-		<div sec:authorize="hasAnyAuthority('ADMIN','QUALITY_MANAGER')" >
-            <section id="equipment" class="section hidden">
-                 <h2>Quality Control</h2>
-                <div class="card-container">
-                    <div class="card">
-                        <h3>Quality Metrics</h3>
-                        <p>Defect rate: 1%</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Inspection Results</h3>
-                        <p>95% passed inspections</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Non-Conformance Reports</h3>
-                        <p>5 reports this month</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Corrective Actions</h3>
-                        <p>3 corrective actions implemented</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Supplier Quality</h3>
-                        <p>98% of suppliers meet quality standards</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Quality Trends</h3>
-                        <p>Improvement noted over the last quarter</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                </div>
-            </section>
-		</div><!-- ADMIN, QUALITY_MANAGER -->
-		<div sec:authorize="hasAnyAuthority('ADMIN','INVENTORY_MANAGER')" > 
-            <section id="inventory" class="section hidden">
-                
-                  <h2>Inventory Dashboard</h2>
-                <div class="card-container">
-                    <div class="card">
-                        <h3>Total Inventory Items</h3>
-                        <p>1,500 items</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Items by Category</h3>
-                        <p>Electronics: 600<br>Furniture: 300<br>Supplies: 600</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Inventory Value</h3>
-                        <p>$450,000</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Stock Levels</h3>
-                        <p>Critical Stock: 5 items<br>Low Stock: 50 items</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Recent Orders</h3>
-                        <p>Last 30 days: 75 orders</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                    <div class="card">
-                        <h3>Supplier Information</h3>
-                        <p>Top 5 suppliers by order volume</p>
-                        <a th:href="@{/}" class="button-link" >View Details</a>
-                    </div>
-                </div>
-            </section>
-		</div><!-- ADMIN, INVENTORY_MANAGER -->
-		<div sec:authorize="hasAnyAuthority('ADMIN','QUALITY_MANAGER')" > 
-            <section id="reports" class="section hidden">
-                <h2>Reports and Analytics</h2>
-                <p>Reports and analytics details go here.</p>
-            </section>
-		</div>
-		<div sec:authorize="hasAnyAuthority('ADMIN')" > 
-            <section id="settings" class="section hidden">
-                <h2>Settings</h2>
-                <p>Configuration settings go here.</p>
-            </section>
-         </div>
-        </main>
+        header {
+            grid-area: header;
+            display: flex;
+            align-items: center;
+            background-color: #2C3E50;
+            color: white;
+            padding: 20px;
+        }
 
-        <!-- Footer -->
-        <footer>
-            <p>&copy; 2024 Industrial Company - All rights reserved.</p>
-        </footer>
-    </div>
+        header h1 {
+            font-size: 24px;
+        }
 
+        .sidebar {
+            grid-area: sidebar;
+            background-color: #2C3E50;
+            padding: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #1ABC9C;
+            color: white;
+        }
+
+        main {
+            grid-area: main;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        footer {
+            grid-area: footer;
+            background-color: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .card button {
+            background-color: #1ABC9C;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .card button:hover {
+            background-color: #16a085;
+        }
+
+        /* Link styled as a button */
+        .button-link {
+            background-color: #1ABC9C;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .button-link:hover {
+            background-color: #16a085; /* Darker green on hover */
+        }
+    </style>
     <script>
         // JavaScript for dynamic content switching
         document.addEventListener('DOMContentLoaded', () => {
@@ -264,7 +155,7 @@
             const sections = document.querySelectorAll('.section');
 
             links.forEach(link => {
-                link.addEventListener('click', function(e) {
+                link.addEventListener('click', function (e) {
                     e.preventDefault();
 
                     // Remove active class from all links
@@ -283,5 +174,190 @@
             });
         });
     </script>
+</head>
+
+<body>
+    <div th:replace="header"></div>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Dashboard</h1>
+        </header>
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul>
+                <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','HUMAN_RESOURCE')">
+                    <li><a href="/employee/Dashboard/"  >Dashboard Overview</a></li>
+                </div>
+                <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','PRODUCTION_MANAGER','PRODUCTION_SUPERVISOR')">
+                    <li><a href="/prdctn/"  >Production Monitoring</a></li>
+                </div>
+                <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','MAINTENANCE_MANAGER','MAINTENANCE_SUPERVISOR')">
+                    <li><a href="/maintenance/"  >Maintenance</a></li>
+                </div>
+                <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','INVENTORY_MANAGER','WAREHOUSE_SUPERVISOR')">
+                    <li><a href="/invntry/"  >Inventory</a></li>
+                </div>
+                
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <main>
+            <!-- Sections to dynamically show/hide -->
+            <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','HUMAN_RESOURCE')">
+                <section id="overview" class="section">
+                    <h2>HR Management Overview</h2>
+                    <div class="card-container">
+                        <div class="card">
+                            <h3>Manage Employee Records</h3>
+                            <p>Records include roles, departments, and payroll integration.</p>
+                            <a th:href="@{/employee/hr/empDashboard}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Recruitment and Onboarding</h3>
+                            <p>Oversees recruitment, onboarding, and offboarding processes.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Compliance Management</h3>
+                            <p>Ensures compliance with safety, environmental, and regulatory standards.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Audits and Compliance Reports</h3>
+                            <p>Conducts audits and prepares compliance reports.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Attendance and Payroll</h3>
+                            <p>Tracks attendance, manages payroll, and handles employee performance reviews.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Budget Collaboration</h3>
+                            <p>Works closely with the Finance Manager on budget-related matters concerning HR.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- Admin ,HR -->
+            <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','PRODUCTION_MANAGER')">
+                <section id="production" class="section hidden">
+                    <h2>Production Monitoring</h2>
+                    <div class="card-container">
+                        <div class="card">
+                            <h3>Total Production Output</h3>
+                            <p>5,000 units</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Production Rate</h3>
+                            <p>1,200 units/hour</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Quality Control Statistics</h3>
+                            <p>98% of products passed QC</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- Admin ,PM -->
+            <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','MAINTAINANCE_HEAD')">
+                <section id="maintenance" class="section hidden">
+                    <h2>Maintenance Management</h2>
+                    <div class="card-container">
+                        <div class="card">
+                            <h3>Equipment Status</h3>
+                            <p>All equipment operational</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Maintenance Schedule</h3>
+                            <p>Next scheduled maintenance in 3 days</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- Admin ,MH -->
+            <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','QUALITY_MANAGER')">
+                <section id="equipment" class="section hidden">
+                    <h2>Quality Control</h2>
+                    <div class="card-container">
+                        <div class="card">
+                            <h3>QC Procedures</h3>
+                            <p>Detailed QC procedures for all products.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>QC Reports</h3>
+                            <p>QC report for the last month: 99% success rate.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- Admin ,QM -->
+            <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','INVENTORY_MANAGER')">
+                <section id="inventory" class="section hidden">
+                    <h2>Inventory Management</h2>
+                    <div class="card-container">
+                        <div class="card">
+                            <h3>Total Inventory Value</h3>
+                            <p>$150,000</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Stock Levels</h3>
+                            <p>All items within optimal stock levels.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- Admin ,IM -->
+            <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','QUALITY_MANAGER')">
+                <section id="reports" class="section hidden">
+                    <h2>Reports & Analytics</h2>
+                    <div class="card-container">
+                        <div class="card">
+                            <h3>Monthly Production Report</h3>
+                            <p>Report details for the last month.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                        <div class="card">
+                            <h3>Employee Performance Reports</h3>
+                            <p>Performance evaluations for all employees.</p>
+                            <a th:href="@{/employee/}" class="button-link">View Details</a>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- Admin ,QM -->
+            <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER')">
+                <section id="settings" class="section hidden">
+                    <h2>Settings</h2>
+                    <p>Manage system settings and configurations here.</p>
+                    <div class="card-container">
+                        <div class="card">
+                            <h3>General Settings</h3>
+                            <p>Update application settings and preferences.</p>
+                            <a th:href="@{/employee/}" class="button-link">Edit Settings</a>
+                        </div>
+                        <div class="card">
+                            <h3>User Management</h3>
+                            <p>Manage users and their roles in the system.</p>
+                            <a th:href="@{/employee/}" class="button-link">Manage Users</a>
+                        </div>
+                    </div>
+                </section>
+            </div><!-- Admin -->
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 Srisrinivasa Industrial Company - All rights reserved.</p>
+        </footer>
+    </div>
 </body>
+
 </html>

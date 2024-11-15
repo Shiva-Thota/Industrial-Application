@@ -30,8 +30,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 
 	@Override
 	public Employee getEmployee(String email) throws EmployeeNotFoundException  {
-		
-		return empRepo.findById(email).orElseThrow(()->new EmployeeNotFoundException("Employee Not Found in Database"));
+ 		return empRepo.findById(email).orElseThrow(()->new EmployeeNotFoundException("Employee Not Found in Database"));
 	}
 
 	@Override
@@ -175,8 +174,32 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 
 	@Override
 	public boolean isEmployeeEnabled(String email) {
-		// TODO Auto-generated method stub
-		return empRepo.isEmployeeEnabled(email);
+ 		return empRepo.isEmployeeEnabled(email);
+	}
+
+	@Override
+	public List<String> getEmailsBasedOnRole(Set<String> roles) {
+ 		return empRepo.getEmailsBasedOnRole(roles);
+	}
+
+	@Override
+	public List<Employee> findEmployeesByRoles(Set<String> roles) {
+ 		return empRepo.findEmployeesByRoles(roles);
+	}
+
+	@Override
+	public List<String> findByDepartment(String department) {
+ 		return empRepo.findEmailByDepartment(department);
+	}
+
+	@Override
+	public void setregisteredTeamWithEmail(String registeredTeam, String email) {
+		empRepo.setregisteredTeamWithEmail(registeredTeam, email);
+	}
+
+	@Override
+	public void setRemoveRegisteredTeamWithEmail(String email) {
+		empRepo.setRemoveRegisteredTeamWithEmail(email);
 	}
 
 }

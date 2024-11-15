@@ -19,6 +19,9 @@ import com.sri.Exceptions.EmployeeNotFoundException;
 	
 	List<String> getRolesWithEmail(String email);
 	String getPasswordWithEmail(String email);
+	void setregisteredTeamWithEmail(String registeredTeam,String email);	
+	void setRemoveRegisteredTeamWithEmail(String email);
+
 	
 	byte[] getPhotoWithEmail(String email);
 	String getFullNameWithEmail(String email);
@@ -26,6 +29,12 @@ import com.sri.Exceptions.EmployeeNotFoundException;
 	boolean isEmployeeExist(String email);
 	
 	boolean isEmployeeEnabled(String email);
+	
+	List<String> getEmailsBasedOnRole(Set<String> roles);
+	
+	 List<Employee> findEmployeesByRoles(Set<String> roles);
+     List<String> findByDepartment(String department);
+
 	
 	  Page<Employee> findByDepartment(String department,Pageable pageable);
 	

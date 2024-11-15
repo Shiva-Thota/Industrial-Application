@@ -57,7 +57,7 @@
     <h2 style="color:white;text-align:center">Reset Password</h2><br><br>
      <h2 style="color: Green;text-align:center" th:if="${msg == 'Password Updated'}">Password Updated</h2>
 	<h2 style="color: red;text-align:center" th:if="${msg == 'Password Not Matched'}">Invalid Previous Password</h2><br>
-    <form th:action="@{/user/changePassword}" method="get" enctype="multipart/form-data" onsubmit="return validatePasswords()">
+    <form th:action="@{/employee/user/changePassword}" method="get" enctype="multipart/form-data" onsubmit="return validatePasswords()">
         
         <div class="input-group" style="color:white;">
             <label for="old_password">Old Password:</label>

@@ -11,7 +11,7 @@
 <!-- Header -->
 <header>
         <div class="logo">
-        	<a th:href="@{/}"><img th:src="@{/images/logo.png}"></a>
+        	<a th:href="@{/employee/}"><img th:src="@{/images/logo.png}"></a>
             <h1>Sri Srinivasa Industries</h1>
         </div>
 </header>
@@ -22,7 +22,7 @@
             <h2>Login</h2>
             <span style="color: red;" th:if="${param.error}">Invalid Credentials</span>
 	<span style="color: lightBlue;" th:if="${param.logout}">Successfully Logged out</span><br>
-            <form  th:action="@{/login}" method="post">
+            <form  th:action="@{/auth/login}" method="post">
                 <div class="input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required>

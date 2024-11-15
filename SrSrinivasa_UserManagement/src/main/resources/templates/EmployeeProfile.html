@@ -13,10 +13,10 @@
     <div class="profile-container">
         <!-- Profile Header -->
         <div class="profile-header">
-            <img th:src="@{'data:image/jpeg;base64,'+${EmployeePhoto}}" alt="Profile Picture"/>
+              <img th:src="@{'data:image/jpeg;base64,'+${EmployeePhoto}}" alt="Profile Picture"/>
             <div>
                 <h2><span th:text="${EmployeeProfile.firstName}"></span> <span th:text="${EmployeeProfile.lastName}"></span></h2>
-                <p><div th:each="role : ${session.employeeRoles}">&nbsp;<span th:text="${role}"></span><br></div></p>
+                <p><div th:each="role : ${EmployeeProfile.roles}">&nbsp;<span th:text="${role}"></span><br></div></p>
             </div>
         </div>
 
@@ -24,24 +24,29 @@
         <div class="profile-details">
             <h3>Personal Information</h3>
             <p><strong>Email:</strong> <span th:text="${EmployeeProfile.email}"></span></p>
+            <p><strong>Gender:</strong> <span th:text="${EmployeeProfile.gender}"></span></p>
             <p><strong>Phone:</strong> <span th:text="${EmployeeProfile.phoneNumber}"></span></p>
             <p><strong>Department:</strong> <span th:text="${EmployeeProfile.department}"></span></p>
             <p><strong>Father:</strong> <span th:text="${EmployeeProfile.father}"></span></p>
+            <p><strong>Capabilities:</strong> <span th:text="${EmployeeProfile.capabilities}"></span></p>
             <p><strong>Blood Group:</strong> <span th:text="${EmployeeProfile.bloodGroup}"></span></p>
             <p><strong>Marital Status:</strong> <span th:text="${EmployeeProfile.maritalStatus}"></span></p>
             <p><strong>Addhar No:</strong> <span th:text="${EmployeeProfile.addharNo}"></span></p>
             <p><strong>Address:</strong> <span th:text="${EmployeeProfile.address}"></span></p>
             <p><strong>Member Since:</strong> <span th:text="${EmployeeProfile.dateOfJoining}"></span></p>
+            <p><strong>Registered Team:</strong> <span th:text="${EmployeeProfile.registeredTeam}"></span></p>
         </div>
 
-<div th:if="${session.employeeEmail == EmployeeProfile.email}">
+<div th:if="${LoggedInEmail}!=null">
+<div th:if="${LoggedInEmail == EmployeeProfile.email}">
         <!-- Profile Actions -->
         <div class="profile-actions">
-            <a th:href="@{/user/updateEmp}">Edit Profile</a>
-            <a th:href="@{/user/passwordChangePage}">Change Password</a>
-            <a th:href="@{/signOut}">Logout</a>
+            <a th:href="@{/employee/user/updateEmp}">Edit Profile</a>
+            <a th:href="@{/employee/user/passwordChangePage}">Change Password</a>
+            <a th:href="@{/auth/logout}">Logout</a>
         </div>
     </div>
+</div>
 </div>
     <!-- Footer -->
     <footer>

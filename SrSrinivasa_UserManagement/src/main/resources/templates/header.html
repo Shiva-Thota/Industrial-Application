@@ -105,30 +105,19 @@ header .dropdown a:hover {
 </style>
 <header>
    <div class="logo">
-        	<a th:href="@{/Dashboard/}"><img th:src="@{/images/logo.png}"></a>
+        	<a th:href="@{/employee/Dashboard/}"><img th:src="@{/images/logo.png}"></a>
             <h1>Sri Srinivasa Industries</h1>
     </div>
 
     <div class="profile" id="profile">
         <span th:text="${#dates.format(#dates.createNow(), 'HH:mm - dd MMM yyyy')}" style="font-weight: normal;"></span>
-        <div class="user-info">
-            <span th:text="${session.employeeUserName}" style="font-weight: bold; font-size: 20px;"></span>
-            <div class="roles">
-                <span th:each="role : ${session.employeeRoles}"><span th:text="${role}"></span>&nbsp;&nbsp;</span>
-            </div>
-        </div>
+       
 
         <!-- Dropdown Menu -->
         <div class="dropdown" id="dropdown">
-            <p><strong><span th:text="${session.employeeUserName}"></span></strong></p>
-            <p style="font-weight: normal;">Email: <span th:text="${session.employeeEmail}"></span></p>
-            <p style="font-weight: normal;">Roles:
-                <div th:each="role : ${session.employeeRoles}" style="font-weight: strong;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${role}"></span>
-                </div>
-            </p>
-            <a th:href="@{/user/profile}">Profile</a>
-            <a th:href="@{/signOut}">Logout</a>
+            
+            <a th:href="@{/employee/user/profile}">Profile</a>
+            <a th:href="@{/auth/logout}">Logout</a>
         </div>
     </div>
 </header>

@@ -1,11 +1,13 @@
 package com.sri.utils;
 
 import java.io.IOException;
-import java.util.Base64;
+import java.util.Collection;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.sri.DTO.Prod_User_DTO_Employee;
 import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeModel;
 
@@ -26,8 +28,6 @@ public class EmployeeUtils {
  			employeeModel.setAddress(employee.getAddress());
  			employeeModel.setDateOfJoining(employee.getDateOfJoining());
  			employeeModel.setAddharNo(employee.getAddharNo());
- 			
- 			
  			employeeModel.setPassword(employee.getPassword());
 		
  			employeeModel.setEnabled(employee.isEnabled());
@@ -56,7 +56,6 @@ public class EmployeeUtils {
  			employee.setDateOfJoining(employeeModel.getDateOfJoining());
  			employee.setAddharNo(employeeModel.getAddharNo());
  			employee.setPassword(employeeModel.getPassword());
-		
  			employee.setEnabled(employeeModel.isEnabled());
 		
  			employee.setRoles(employeeModel.getRoles());
@@ -76,4 +75,41 @@ public class EmployeeUtils {
 		return employee;
 	}
 	
+	public static Prod_User_DTO_Employee EmployeeToProd_User_DTO(Employee emp) {
+		
+		Prod_User_DTO_Employee prodDTO=new Prod_User_DTO_Employee();
+		prodDTO.setBloodGroup(emp.getBloodGroup());
+		prodDTO.setCapabilities(emp.getCapabilities());
+		prodDTO.setDateOfBirth(emp.getDateOfBirth());
+		prodDTO.setDateOfJoining(emp.getDateOfJoining());
+		prodDTO.setDepartment(emp.getDepartment());
+		prodDTO.setEmail(emp.getEmail());
+		prodDTO.setFullName(emp.getFirstName()+" "+emp.getLastName());
+		prodDTO.setGender(emp.getGender());
+		prodDTO.setPhoneNumber(emp.getPhoneNumber());
+		prodDTO.setPhoto(emp.getPhoto());
+		prodDTO.setRoles(emp.getRoles());
+		prodDTO.setRegisteredTeam(emp.getRegisteredTeam());		
+		return prodDTO;
+	}
+	public static boolean hasRole(Authentication authentication, String role) {
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            return authorities.stream()
+                             .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role));
+        }
+        return false;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+

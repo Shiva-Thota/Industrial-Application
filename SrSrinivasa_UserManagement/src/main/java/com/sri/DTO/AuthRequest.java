@@ -1,4 +1,4 @@
-package com.sri.Entity;
+package com.sri.DTO;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -14,6 +14,4 @@ public class AuthRequest implements Serializable{
 
 	private String username;
 	private String password;
-	private Set<String> roles;
-	
 }

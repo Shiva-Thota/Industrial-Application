@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sri.Entity.AuthRequest;
 import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeModel;
 import com.sri.Exceptions.EmployeeNotFoundException;
@@ -28,8 +25,10 @@ import com.sri.Service.EmployeeService;
 import com.sri.Validators.EmployeeRegistrationValidator;
 import com.sri.Validators.EmployeeUpdateFormValidator;
 
+import jakarta.mail.MessagingException;
+
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/employee/user")
 public class UserHandler {
 	
 	@Autowired
@@ -40,17 +39,16 @@ public class UserHandler {
 	
 	@Autowired 
 	EmployeeUpdateFormValidator employeeUpdateFormValidator;
+	
+	@Value("${gateway.url}")
+	String gateWayUrl;
 
 	@Value("${modelAttribute.Departments}")
 	List<String> Departments;
 	
 	@Value("${modelAttribute.Roles}")
-	List<String> Roles;
+	List<String> Roles;	
 	
-	@GetMapping("/loginPage")
-	public String getLoginPage() {
-		return "EmployeeLogin";
-	}
 	
 	//Profile Page
 	@GetMapping("/profile")
@@ -66,6 +64,7 @@ public class UserHandler {
 		} catch (EmployeeNotFoundException e) {
 			e.printStackTrace();
 		}
+		map.put("LoggedInEmail", principal.getName());
 		map.put("EmployeeProfile",emp);
 		map.put("EmployeePhoto",photo);
 		
@@ -123,7 +122,49 @@ public class UserHandler {
 		} catch (EmployeeNotFoundException e) {
 			redirectAttribute.addFlashAttribute("EmpNotFound", "Employee Not Found in database");
 		}
-		return "redirect:/Dashboard/";
+		return "redirect:"+gateWayUrl+"/employee/Dashboard/";
+	}
+	
+	@PostMapping("/forgotPassword")
+	public String getForgotPasswordPage(@RequestParam("username") String username,Map<String,String> map,RedirectAttributes redirectAttributes) {
+		try {
+			empSer.getEmployee(username);
+		} catch (EmployeeNotFoundException e) {
+			redirectAttributes.addFlashAttribute("email_doesnot_exist", "Enter Valid Registered Email Id");
+			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+		}
+		try {
+			String OTP = empSer.ForgotPasswordSendOTP(username);
+			map.put("SentOTP", OTP);
+			map.put(username, username);
+			return "ForgotPswrdOTPPage";
+		} catch (MessagingException e) {
+			redirectAttributes.addFlashAttribute("email_doesnot_exist", "Internal Server Error");
+			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+		}
+	}
+	
+	@PostMapping("/updateForgotPassword")
+	public String updateForgotPassword(@RequestParam("enteredOTP") String enteredOTP,@RequestParam("SentOTP") String SentOTP,@RequestParam("username") String username,Map<String,String> map,RedirectAttributes redirectAttributes) {
+		if(enteredOTP.equalsIgnoreCase(SentOTP)) {
+			map.put("username", username);
+			return "EmployeePswrdUpdate";
+		}else {
+			redirectAttributes.addFlashAttribute("email_doesnot_exist", "OTP havent Matched");
+			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+		}
+	}
+	
+	@PostMapping("/updatePassword")
+	public String UpdatePassword(@RequestParam("newPswrd") String newPswrd,@RequestParam("username") String username,RedirectAttributes redirectAttributes) {
+		try {
+			empSer.updateForgotPassword(username, newPswrd);
+			redirectAttributes.addFlashAttribute("passwordUpdated", "Password Updated");
+			return "redirect:"+gateWayUrl+"/auth/login";
+		} catch (EmployeeNotFoundException e) {
+			redirectAttributes.addFlashAttribute("email_doesnot_exist", "Enter Valid Registered Email Id");
+			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+		}
 	}
 	
 	@ModelAttribute("Departments")

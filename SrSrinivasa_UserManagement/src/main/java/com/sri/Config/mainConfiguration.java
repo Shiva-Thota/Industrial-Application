@@ -8,7 +8,6 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 @Configuration
 public class mainConfiguration {
 
-	
 	 @Bean
 	BeanNameViewResolver viewresolver() {
 		BeanNameViewResolver res=new BeanNameViewResolver();

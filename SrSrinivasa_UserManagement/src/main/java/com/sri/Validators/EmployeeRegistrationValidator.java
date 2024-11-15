@@ -57,6 +57,10 @@ public class EmployeeRegistrationValidator implements Validator{
 			errors.rejectValue("dateOfBirth", "emp.dateOfBirth.null");
 		}
 		
+		if(emp.getCapabilities()==null ||emp.getCapabilities().isBlank()) {
+			errors.rejectValue("capabilities", "emp.capabilities.null");
+		}
+		
 		
 		if(emp.getEmail()==null ||emp.getEmail().isBlank()) {
 			errors.rejectValue("email", "emp.email.null");

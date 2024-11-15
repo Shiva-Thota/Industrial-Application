@@ -7,9 +7,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.sri.Filters.JWTRequestFilter;
 import com.sri.Service.EmployeeService;
@@ -35,48 +36,51 @@ public class EmployeeConfiguration {
             						.passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
-//	@Bean
-//	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfigurer) throws Exception {
-//		return authConfigurer.getAuthenticationManager();
-//	}
-//	
-//	
-//	@Bean
-//	AuthenticationProvider authenticationProvider(AuthenticationProvider prvdr) {
-//		DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
-//		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-//		daoAuthenticationProvider.setUserDetailsService(employeeService);
-//		return prvdr;
-//	}
-	
-   //For Statefull Authentication
      
-     @Bean
-    SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
-    	http.authorizeHttpRequests(req->
-    		req.requestMatchers("/","/user/loginPage","/images/**","/css/**","/hr/register").permitAll()
-    		.requestMatchers("/hr/**").hasAnyAuthority("ADMIN","HUMAN_RESOURCE")
-    		.anyRequest().authenticated()
-    	)
-    	.formLogin(frm->
-    		frm.loginPage("/user/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/Dashboard/")
-    	).logout(logout -> logout
-    	        .logoutRequestMatcher(new AntPathRequestMatcher("/signOut"))
-    	        .logoutSuccessUrl("/user/loginPage?logout")
-    	).exceptionHandling(ex->ex.accessDeniedPage("/accessDenined403"));
-    	return http.build();
-    }
-    
-//	@Bean
+//     @Bean
 //    SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
 //    	http.authorizeHttpRequests(req->
 //    		req.requestMatchers("/","/user/loginPage","/images/**","/css/**","/hr/register").permitAll()
 //    		.requestMatchers("/hr/**").hasAnyAuthority("ADMIN","HUMAN_RESOURCE")
 //    		.anyRequest().authenticated()
-//    	).csrf(csrf->csrf.disable())
-//    	.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//    	.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
+//    	)
+//    	.formLogin(frm->
+//    		frm.loginPage("/user/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/Dashboard/")
+//    	).logout(logout -> logout
+//    	        .logoutRequestMatcher(new AntPathRequestMatcher("/signOut"))
+//    	        .logoutSuccessUrl("/user/loginPage?logout")
+//    	).exceptionHandling(ex->ex.accessDeniedPage("/accessDenined403"));
 //    	return http.build();
 //    }
+     
+     /*
+ 	 *   For Statefull Authentication
+ 	 @Bean
+ 	 
+ 	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfigurer) throws Exception {
+ 		return authConfigurer.getAuthenticationManager();
+ 	}
+ 	
+ 	
+ 	@Bean
+ 	AuthenticationProvider authenticationProvider(AuthenticationProvider prvdr) {
+ 		DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+ 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+ 		daoAuthenticationProvider.setUserDetailsService(employeeService);
+ 		return prvdr;
+ 	}*/
+    
+	@Bean
+    SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
+    	http.authorizeHttpRequests(req-> 
+    		req.requestMatchers("/employee/","/employee/login","/auth/login","/auth/loginPage","/images/**","/css/**").permitAll()
+    		.requestMatchers("/employee/hr/**").hasAnyAuthority("GENERAL_MANAGER","HUMAN_RESOURCE")
+    		.anyRequest().authenticated()
+    	).csrf(csrf->csrf.disable())
+    	.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    	.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class)
+    	.exceptionHandling(exception->exception.accessDeniedPage("/employee/error-403"));
+    	return http.build();
+    }
         
 }

@@ -49,12 +49,17 @@ public class Employee implements Serializable{
 	private String emergencyPerson;
 	private String emergencyContact;
 	private String maritalStatus;
+	
+	@Column(length = 700)
+	private String capabilities;
 
 	@Lob
 	@Column(columnDefinition = "LONGBLOB")
 	private byte[] photo;
 	
 	private String addharNo;
+	
+	private String registeredTeam;
 	
 	@Lob
 	@Column(columnDefinition = "LONGBLOB")

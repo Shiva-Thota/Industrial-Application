@@ -12,7 +12,7 @@
 <br><br><br><br><br><br><br><br><br><br>
     <div class="container">
         <h2>Employee Update Form</h2>
-        <form th:action="@{/user/updateEmp}" method="POST" th:object="${employeeModel}" enctype="multipart/form-data">
+        <form th:action="@{/employee/user/updateEmp}" method="POST" th:object="${employeeModel}" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label for="first_name">First Name:</label> <span style="color:red" class="error" th:if="${#fields.hasErrors('firstName')}" th:text="${#fields.errors('firstName')}"></span>

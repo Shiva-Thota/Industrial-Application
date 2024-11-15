@@ -110,7 +110,7 @@
 
 <h2 style="color: #16a085;text-align:center">Employee List</h2>
 
-<form th:action="@{/hr/EmployeeList}" method="get">
+<form th:action="@{/employee/hr/EmployeeList}" method="get">
 <!-- Top Bar for Filtering and Searching -->
 <div class="top-bar">
     <div class="filter-container">
@@ -155,8 +155,8 @@
 <div th:if="${EmployeesList.hasContent()}">
 	<!-- Download Buttons for PDF and Excel -->
 	<div class="download-buttons">
-	    <a th:href="@{/hr/EmployeeList/download(type=pdf,department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}">Download PDF</a>
-	    <a th:href="@{/hr/EmployeeList/download(type=excel,department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}">Download Excel</a>
+	    <a th:href="@{/employee/hr/EmployeeList/download(type=pdf,department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}">Download PDF</a>
+	    <a th:href="@{/employee/hr/EmployeeList/download(type=excel,department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}">Download Excel</a>
 	</div>
 </div>
 <!-- Employee Table -->
@@ -189,8 +189,8 @@
                 </div>
             </td>
             <td>
-                <a th:href="@{/hr/profile(email=${employee.email})}">View</a> |
-                <a th:href="@{/hr/updateEmp(email=${employee.email})}">Edit</a>
+                <a th:href="@{/employee/hr/profile(email=${employee.email})}">View</a> |
+                <a th:href="@{/employee/hr/updateEmp(email=${employee.email})}">Edit</a>
             </td>
         </tr>
     </tbody>
@@ -201,9 +201,9 @@
 <div th:if="${EmployeesList.hasContent()}">
 <!-- Pagination Controls -->
 <div class="pagination">
-    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number - 1}, department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}" th:classappend="${EmployeesList.first}? 'disabled' : ''">Previous</a>
+    <a th:href="@{/employee/hr/EmployeeList(page=${EmployeesList.number - 1}, department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}" th:classappend="${EmployeesList.first}? 'disabled' : ''">Previous</a>
     <span>Page <span th:text="${EmployeesList.number + 1}"></span> of <span th:text="${EmployeesList.totalPages}"></span></span>
-    <a th:href="@{/hr/EmployeeList(page=${EmployeesList.number + 1}, department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}" th:classappend="${EmployeesList.last}? 'disabled' : ''">Next</a>
+    <a th:href="@{/employee/hr/EmployeeList(page=${EmployeesList.number + 1}, department=${selectedDepartment}, role=${selectedRole}, email=${selectedEmail}, phone=${selectedPhone})}" th:classappend="${EmployeesList.last}? 'disabled' : ''">Next</a>
 </div>
 </div>
 

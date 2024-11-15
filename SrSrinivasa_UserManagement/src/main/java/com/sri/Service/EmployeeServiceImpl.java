@@ -26,6 +26,8 @@ import com.sri.Persistance.EmployeeDAO;
 import com.sri.mail.MailSender;
 import com.sri.utils.EmployeeUtils;
 
+import jakarta.mail.MessagingException;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 	
@@ -42,7 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	PasswordEncoder passwordEncoder;
 
 	@Override
-	public String addEmployee(Employee employee) throws SQLException {
+	public String addEmployee(Employee employee) throws SQLException, MessagingException {
 		Employee emp=employee;
 		
 		//setting todays date
@@ -58,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		
 		//sending password to the mail
-		mailSender.sendmail(emp.getEmail(), passwordMailText+password);
+		mailSender.sendJoiningMail(emp.getFirstName()+" "+emp.getLastName(),emp.getEmail(),emp.getRoles(),password);
 		
 		return empDao.addEmployee(emp);
 	}
@@ -174,6 +176,43 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public String deleteEmployee(String email) throws EmployeeNotFoundException {
 		 
 		return empDao.deleteEmployee(email);
+	}
+
+	@Override
+	public List<String> getEmailsBasedOnRole(Set<String> roles) {
+		return empDao.getEmailsBasedOnRole(roles);
+	}
+
+	@Override
+	public List<Employee> findEmployeesByRoles(Set<String> roles) {
+ 		return empDao.findEmployeesByRoles(roles);
+	}
+
+	@Override
+	public List<String> findByDepartment(String department) {
+ 		return empDao.findByDepartment(department);
+	}
+
+	@Override
+	public void setregisteredTeamWithEmail(String registeredTeam, String email) {
+		empDao.setregisteredTeamWithEmail(registeredTeam, email);
+	}
+
+	@Override
+	public void setRemoveRegisteredTeamWithEmail(String email) {
+		empDao.setRemoveRegisteredTeamWithEmail(email);
+	}
+
+	@Override
+	public String ForgotPasswordSendOTP(String email) throws MessagingException {
+		String OTP=new Random().nextInt(1000, 9999)+"";
+		mailSender.sendForgotPasswordMail(email, OTP);
+		return OTP;
+	}
+
+	@Override
+	public String updateForgotPassword(String email, String password) throws EmployeeNotFoundException {
+ 		return empDao.setPasswordWithEmail(password, email);
 	}
 
 	
