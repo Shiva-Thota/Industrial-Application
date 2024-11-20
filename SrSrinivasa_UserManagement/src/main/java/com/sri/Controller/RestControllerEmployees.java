@@ -96,8 +96,7 @@ public class RestControllerEmployees {
 					dto.setPhoto(null);
 					empList.add(dto);
 				} catch (EmployeeNotFoundException e) {
-					e.printStackTrace();
-				}
+ 				}
 			});
 			return ResponseEntity.ok(empList);
 		}catch(Exception e) {

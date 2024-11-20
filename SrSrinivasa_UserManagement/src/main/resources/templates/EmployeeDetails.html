@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            position: relative;
+        }
+
+        .employee-photo {
+            position: absolute;
+            top: 140px;
+            right: 100px;
+            width: 125px;
+            height: 160px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #333;
+        }
+
+    
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+     .deletion-record {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .deletion-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .detail-column {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .detail-column p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+
+        .reason-for-deletion {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e6e6e6;
+            border-radius: 5px;
+        }
+
+        .reason-for-deletion strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="header"></div>
+<div class="container">
+    <h1>Employee Details</h1>
+
+    <!-- Employee Image -->
+    <img class="employee-photo" th:src="@{'data:image/jpeg;base64,'+${EmployeePhoto}}" alt="Employee Photo"/>
+
+    <!-- Personal Information -->
+    <div class="form-group">
+        <h2>Personal Information</h2>
+        <p><strong>Name:</strong> <span th:text="${employee.firstName}"></span><span th:text="${employee.lastName}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${employee.email}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${employee.phoneNumber}"></span></p>
+        <p><strong>Father:</strong> <span th:text="${employee.father}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${employee.address}"></span></p>
+        <p><strong>Blood Group:</strong> <span th:text="${employee.bloodGroup}"></span></p>
+        <p><strong>Marital Status:</strong> <span th:text="${employee.maritalStatus}"></span></p>
+        <p><strong>Addhar No:</strong> <span th:text="${employee.addharNo}"></span></p>
+    </div>
+
+    <!-- Professional Information -->
+    <div class="form-group">
+        <h2>Professional Information</h2>
+        <p><strong>Department:</strong> <span th:text="${employee.department}"></span></p>
+        <p><strong>Designation:<div th:each="role : ${employee.roles}">&nbsp;<span th:text="${role}"></span><br></div></p>
+        <p><strong>Date of Joining:</strong> <span th:text="${#dates.format(employee.dateOfJoining, 'yyyy-MM-dd')}"></span></p>
+        <p><strong>Registered Team:</strong> <span th:text="${employee.registeredTeam}"></span></p>
+    </div>
+
+    <!-- Performance Metrics -->
+    <div class="form-group">
+        <h2>Skills and Capabilities</h2>
+        <p><strong>Skills:</strong>
+           <span th:text="${employee.capabilities}"></span>
+        </p>
+     </div>
+ <!-- Employee Deletion List -->
+    <div th:if="${employeeDeletionList != null}">
+        <h2>Employee Deletion List</h2>
+        <div th:each="deletion : ${employeeDeletionList}" class="deletion-record">
+            <div class="deletion-details">
+                <!-- Column 1 -->
+                <div class="detail-column">
+                    <p><strong>Deletion ID:</strong> <span th:text="${deletion.employeeDeletionId}"></span></p>
+                    <p><strong>Requested By:</strong> <span th:text="${deletion.requestedBy}"></span></p>
+                    <p><strong>Approved By:</strong> <span th:text="${deletion.approvedBy}"></span></p>
+                     <p><strong>Joined Date:</strong> <span th:text="${#dates.format(deletion.joinedDate, 'yyyy-MM-dd')}"></span></p>
+                </div>
+
+                <!-- Column 2 -->
+                <div class="detail-column">
+                    <p><strong>Status:</strong> <span th:text="${deletion.status}"></span></p>
+                   
+                    <p><strong>Requested Date:</strong> <span th:text="${#dates.format(deletion.requestedDate, 'yyyy-MM-dd')}"></span></p>
+                    <p><strong>Approved Date:</strong> <span th:text="${#dates.format(deletion.approvedDate, 'yyyy-MM-dd')}"></span></p>
+                   
+                </div>
+            </div>
+
+            <!-- Reason for Deletion -->
+            <div class="reason-for-deletion">
+                <strong>Reason for Deletion:</strong>
+                <span th:text="${deletion.reasonForDeletion}"></span>
+            </div>
+        </div>
+    </div>
+<div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','HUMAN_RESOURCE')">
+             <a th:href="@{/employee/hr/changeRoleandDprt/{email}(email=${employee.email})}" style="float: right;">Edit Role and Department</a>
+             <br>
+ </div>
+</div>
+</body>
+</html>

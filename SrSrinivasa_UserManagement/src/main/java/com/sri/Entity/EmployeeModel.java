@@ -19,6 +19,7 @@ public class EmployeeModel implements Serializable{
 	private String lastName;
 	private String father;
 	private String department;
+	private boolean reJoined;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
 	private String gender;

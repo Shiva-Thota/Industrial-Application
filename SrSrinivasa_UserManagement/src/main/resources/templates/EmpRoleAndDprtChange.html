@@ -1,0 +1,65 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+    <link rel="stylesheet" type="text/css" media="all"
+     href="/css/index.css" th:href="@{/css/RegisterStyles.css}" />
+
+</head>
+
+<body>
+    <!--      Header -->
+<header>
+        <div class="logo">
+        	<a th:href="@{/employee/}"><img th:src="@{/images/logo.png}"></a>
+            <h1>Sri Srinivasa Industries</h1>
+        </div>
+</header>
+<br><br><br><br><br><br>
+    <div class="container">
+
+         <h2>Change Role And Department</h2>
+        <br>
+         <h2>Name : <span th:text="${empName}"></span></h2>
+        <h3 style="color: white;text-align:center">Email: <span th:text="${empEmail}"></span></h3>
+       
+       
+         <form th:action="@{/employee/hr/changeRoleandDprt}"  method="POST">
+         <input type="hidden" name="email" th:value="${empEmail}">
+             <div class="form-row">
+                <div class="form-group">
+                 <h3 style="color: #16a085;text-align:center">Prev Department : <span th:text="${empDepartment}"></span></h3>
+                    <label for="dprt">Department:</label>
+                   <select name="department" id="dprt">
+			            <option th:each="dept : ${Departments}" th:value="${dept}" th:text="${dept}"></option>
+			        </select><br><br>
+                </div>
+            
+                <div class="form-group">
+                <h3 style="color: #16a085;text-align:center">Prev Roles : <div th:each="role : ${empRoles}">&nbsp;<span th:text="${role}"></span><br></div></h3>
+                    <label for="roles">Roles:</label>
+                    <select id="roles" name="roles" multiple Required onchange="updateSelectedRoles()">
+			            <option th:each="skill : ${Roles}"
+			                    th:value="${skill}"
+			                    th:text="${skill}"></option>
+			        </select>
+                    <div id="selected-roles" style="color:white"></div> <!-- This is where the selected roles will be displayed -->
+                </div>
+            <div class="form-group full-width">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function updateSelectedRoles() {
+            const rolesSelect = document.getElementById('roles');
+            const selectedRolesDiv = document.getElementById('selected-roles');
+            const selectedOptions = Array.from(rolesSelect.selectedOptions).map(option => option.text);
+            selectedRolesDiv.innerHTML = selectedOptions.length ? 'Selected Roles: ' + selectedOptions.join(', ') : '';
+        }
+        
+    </script>
+    
+</body>
+</html>

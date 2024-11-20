@@ -3,8 +3,11 @@ package com.sri.Controller;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +18,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sri.Entity.Employee;
+import com.sri.Entity.EmployeeDeletion;
 import com.sri.Entity.EmployeeModel;
 import com.sri.Exceptions.EmployeeNotFoundException;
 import com.sri.Service.EmployeeService;
@@ -65,13 +70,16 @@ public class HumanResourceHanlder {
 	//Registering Employee in Database
 	@PostMapping("/register")
 	public String registerEmployee(@ModelAttribute Employee employee,RedirectAttributes redirectAttribute,BindingResult error ) {
+		if(empSer.isEmployeeOldWorker(employee.getEmail())) {
+			redirectAttribute.addFlashAttribute("OldEmployee", "OLD Employee");
+			return "redirect:"+gateWayUrl+"/employee/hr/enableOldEmp/"+employee.getEmail();
+		}
 		
 		if(employeeRegistrationValidator.supports(Employee.class)) {
 			employeeRegistrationValidator.validate(employee, error);
 			if(error.hasErrors())
 				return "EmployeeRegister";
 		}
-		
 		String msg="";
 		try {
 			try {
@@ -87,6 +95,38 @@ public class HumanResourceHanlder {
 		return "redirect:"+gateWayUrl+"/employee/hr/empDashboard";
 	}
 	
+	@GetMapping("/enableOldEmp/{email}")
+    public String getOldEmpdetails(@PathVariable("email") String email, @ModelAttribute Employee emp,Map<String,Object> map) {
+		String photo="";
+		if(!empSer.isEmployeeOldWorker(email)) 
+			return "error-404";
+		
+		if(empSer.getPhotoWithEmail(email)!=null)
+			photo=Base64.getEncoder().encodeToString(empSer.getPhotoWithEmail(email));
+		try {
+			Optional<Employee> oldEmployeedetais = empSer.getOldEmployeedetais(email);
+			if(oldEmployeedetais.isEmpty())
+				throw new EmployeeNotFoundException("");
+			emp=oldEmployeedetais.get();
+			 emp.setPhoto(null);
+			 emp.setAddharCard(null);
+		} catch (EmployeeNotFoundException e) {
+			 
+		}
+		map.put("EmployeeProfile",emp);
+		map.put("EmployeePhoto",photo);
+		return "OldEmpProfile";
+	}
+	
+	@PostMapping("/enableOldEmployee")
+	public String enableOlDEmployee(@RequestParam("email") String email) {
+		try {
+ 			empSer.addOldEmployee(email);
+			 return "redirect:"+gateWayUrl+"/employee/hr/profile?email="+email;
+		} catch (EmployeeNotFoundException e) {
+			return "";
+ 		}
+	}
 	
 	//Getting Update Page 
 	@GetMapping("/updateEmp")
@@ -129,14 +169,17 @@ public class HumanResourceHanlder {
 			 emp=empSer.getEmployee(email);
 			 emp.setPhoto(null);
 			 emp.setAddharCard(null);
+			 if(emp.isReJoined()) {
+				 List<EmployeeDeletion> employeeDeletionList = empSer.getEmployeeDeletion(email);
+				 map.put("employeeDeletionList", employeeDeletionList);
+			 }
 		} catch (EmployeeNotFoundException e) {
-			
-			e.printStackTrace();
+			return "error-404";
 		}
-		map.put("EmployeeProfile",emp);
-		map.put("EmployeePhoto",photo);
 		
-		return "EmployeeProfile";
+		map.put("employee",emp);
+		map.put("EmployeePhoto",photo);
+		return "EmployeeDetails";
 	}
 	
 	//Getting the List of Employees
@@ -194,18 +237,109 @@ public class HumanResourceHanlder {
 		return "Pdf_Download";
 	}
 	
-	@GetMapping("/deleteEmp")
-	public String delteEmp(@RequestParam("email") String email,Map<String,Object> map) {
-			String msg="";
+	@GetMapping("/changeRoleandDprt/{email}")
+	public String getChangeRoleAndDepartmentPage(@PathVariable("email") String email,Map<String,Object> map) {
 		try {
-			msg= empSer.deleteEmployee(email);
-			map.put("Emp_Deleted",msg);
+			Employee emp=empSer.getEmployee(email);
+			map.put("empName", emp.getFirstName()+" "+emp.getLastName());
+			map.put("empDepartment", emp.getDepartment());
+			map.put("empRoles", emp.getRoles());
+			map.put("empEmail", emp.getEmail());
+			return "EmpRoleAndDprtChange";
+		} catch (EmployeeNotFoundException e) {
+ 			return "error-404";
+		}
+	}
+	@PostMapping("/changeRoleandDprt")
+	public String changeRoleandDepartment(@RequestParam("email") String empEmail,
+			@RequestParam("roles") Set<String> empRoles,@RequestParam("department") String empDepartment) {
+		try {
+			empSer.changeDepartment(empDepartment, empEmail);
+			empSer.changeRole(empRoles, empEmail);
+			 return "redirect:"+gateWayUrl+"/employee/hr/profile?email="+empEmail;
+		} catch (EmployeeNotFoundException e) {
+			return "error-404";
+		}
+	}
+	
+	//Delete Emp List
+	@PostMapping("/addToDeleteEmp")
+	public String delteEmp(@RequestParam("email") String email,@RequestParam("reasonForDeletion") String reasonForDeletion,Map<String,Object> map,Principal principal) {
+			String msg="";
+ 		try {
+ 			if(!empSer.isEmployeeExist(email))
+				throw new EmployeeNotFoundException("");
+ 			msg= empSer.deleteEmployeeReq(email,principal.getName(),reasonForDeletion);
+			map.put("Emp_Deleted","Employee Deletion request Raised");
 		} catch (EmployeeNotFoundException e) {
 			map.put("Emp_Deleted","Email doesn't Exist");
-			
+			return "HREmployeeDashboard";
 		}
-		return "HREmployeeDashboard";
+		return "redirect:"+gateWayUrl+"/employee/hr/empDashboard";
 	}	
+	
+	
+	
+	@GetMapping("/dlteEmpReqList")
+	public String getDeleteEmpReqList(@RequestParam(name="email",required = false) String email,@RequestParam(name="dprtmnt",required = false) String department,@RequestParam(name="sts",required = false) String status,
+			@RequestParam(name="empDltnId",required = false) Long employeeDeletionId,@PageableDefault(size =2,page = 0)  Pageable pg,Map<String,Object> map) {
+		try {
+			
+		if(email==null) {
+			email="";
+		}
+		if(department==null) {
+			department="";
+		}
+		if(status==null) {
+			status="";
+		}
+		if(employeeDeletionId==null) {
+			employeeDeletionId=(long) 0;
+		}	
+		map.put("email", email);
+		map.put("department",department);
+		map.put("status",status);
+		map.put("employeeDeletionId",employeeDeletionId);
+		
+		Page<EmployeeDeletion> empList=empSer.getEmployeeDeletionPage(email, employeeDeletionId, department, status, pg);
+		map.put("EmployeeDeletionList", empList);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return "EmployeeDeletionList";
+	}
+	
+	@GetMapping("/dlteEmpReqDetails/{empDlteId}")
+	public String EmployeeDeleteDetailsPage(@PathVariable("empDlteId") Long empDlteId,Map<String,Object> map) {
+		try {
+			EmployeeDeletion employeeDeletionbyId = empSer.getEmployeeDeletionbyId(empDlteId);
+			map.put("EmployeeDeletion", employeeDeletionbyId);
+		} catch (EmployeeNotFoundException e) {
+			return "error-404";
+		}
+		return "EmployeDeletionDetails";
+	}
+	
+	@GetMapping("/dlteEmpReq/reject/{id}")
+	public String rejectDeleteEmployeeRequest(@PathVariable("id") Long id,Principal principal) {
+		empSer.upadteEmployeeDeletionStatusbyEmail("Rejected", id);
+		empSer.upadteEmployeeDeletionApprovedBybyEmail(new Date(), principal.getName(), id);
+		return "HREmployeeDashboard";
+	}
+	
+	@GetMapping("/dlteEmpReq/approve/{id}/{email}")
+	public String approveDeleteEmployeeRequest(@PathVariable("id") Long id,@PathVariable("email") String email,Principal principal) {
+		try {
+			empSer.deleteEmployee(email);
+			empSer.upadteEmployeeDeletionStatusbyEmail("Approved", id);
+			empSer.upadteEmployeeDeletionApprovedBybyEmail(new Date(), principal.getName(), id);
+			return "HREmployeeDashboard";
+		} catch (EmployeeNotFoundException e) {
+			return "error-404";
+		}
+	}
+	
 	
 	@ModelAttribute("Departments")
 	public List<String> getDepartments(){		

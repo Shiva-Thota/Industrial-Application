@@ -1,0 +1,57 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorator="layouts/default">    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" media="all"
+     href="/css/index.css" th:href="@{/css/ProfileStyles.css}" /> 
+</head>
+<body>
+ <div th:replace="header"></div>
+    <!-- Profile Container -->
+    <div class="profile-container">
+
+		<div style="text-align:center">
+		<h1>Old Employee details</h1><br>
+		<span style="color: red;">*note:Employee is deleted from the Organization</span><br>
+		</div>
+        <!-- Profile Header -->
+        <div class="profile-header">
+              <img th:src="@{'data:image/jpeg;base64,'+${EmployeePhoto}}" alt="Profile Picture"/>
+            <div>
+                <h2><span th:text="${EmployeeProfile.firstName}"></span> <span th:text="${EmployeeProfile.lastName}"></span></h2>
+                <p><div th:each="role : ${EmployeeProfile.roles}">&nbsp;<span th:text="${role}"></span><br></div></p>
+            </div>
+        </div>
+
+        <!-- Profile Details Section -->
+        <div class="profile-details">
+            <h3>Personal Information</h3>
+            <p><strong>Email:</strong> <span th:text="${EmployeeProfile.email}"></span></p>
+            <p><strong>Gender:</strong> <span th:text="${EmployeeProfile.gender}"></span></p>
+            <p><strong>Phone:</strong> <span th:text="${EmployeeProfile.phoneNumber}"></span></p>
+            <p><strong>Department:</strong> <span th:text="${EmployeeProfile.department}"></span></p>
+            <p><strong>Father:</strong> <span th:text="${EmployeeProfile.father}"></span></p>
+            <p><strong>Capabilities:</strong> <span th:text="${EmployeeProfile.capabilities}"></span></p>
+            <p><strong>Blood Group:</strong> <span th:text="${EmployeeProfile.bloodGroup}"></span></p>
+            <p><strong>Marital Status:</strong> <span th:text="${EmployeeProfile.maritalStatus}"></span></p>
+            <p><strong>Addhar No:</strong> <span th:text="${EmployeeProfile.addharNo}"></span></p>
+            <p><strong>Address:</strong> <span th:text="${EmployeeProfile.address}"></span></p>
+            <p><strong>Member Since:</strong> <span th:text="${EmployeeProfile.dateOfJoining}"></span></p>
+            <p><strong>Registered Team:</strong> <span th:text="${EmployeeProfile.registeredTeam}"></span></p>
+        </div>
+
+
+         <form  th:action="@{/employee/hr/enableOldEmployee}" method="post">
+            <input type="hidden" name="email" th:value="${EmployeeProfile.email}">
+            <button>Add Again</button>
+          </form>
+     </div>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Industrial Company - All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -36,44 +36,11 @@ public class EmployeeConfiguration {
             						.passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
-     
-//     @Bean
-//    SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
-//    	http.authorizeHttpRequests(req->
-//    		req.requestMatchers("/","/user/loginPage","/images/**","/css/**","/hr/register").permitAll()
-//    		.requestMatchers("/hr/**").hasAnyAuthority("ADMIN","HUMAN_RESOURCE")
-//    		.anyRequest().authenticated()
-//    	)
-//    	.formLogin(frm->
-//    		frm.loginPage("/user/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/Dashboard/")
-//    	).logout(logout -> logout
-//    	        .logoutRequestMatcher(new AntPathRequestMatcher("/signOut"))
-//    	        .logoutSuccessUrl("/user/loginPage?logout")
-//    	).exceptionHandling(ex->ex.accessDeniedPage("/accessDenined403"));
-//    	return http.build();
-//    }
-     
-     /*
- 	 *   For Statefull Authentication
- 	 @Bean
- 	 
- 	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfigurer) throws Exception {
- 		return authConfigurer.getAuthenticationManager();
- 	}
- 	
- 	
- 	@Bean
- 	AuthenticationProvider authenticationProvider(AuthenticationProvider prvdr) {
- 		DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
- 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
- 		daoAuthenticationProvider.setUserDetailsService(employeeService);
- 		return prvdr;
- 	}*/
-    
 	@Bean
     SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
     	http.authorizeHttpRequests(req-> 
-    		req.requestMatchers("/employee/","/employee/login","/auth/login","/auth/loginPage","/images/**","/css/**").permitAll()
+    		req.requestMatchers("/employee/","/employee/login","/auth/login","/auth/loginPage","/images/**","/css/**"
+    				,"/employee/user/forgotPassword","/employee/user/updateForgotPassword","/employee/user/updatePassword","/employee/user/forgotPasswordPage").permitAll()
     		.requestMatchers("/employee/hr/**").hasAnyAuthority("GENERAL_MANAGER","HUMAN_RESOURCE")
     		.anyRequest().authenticated()
     	).csrf(csrf->csrf.disable())

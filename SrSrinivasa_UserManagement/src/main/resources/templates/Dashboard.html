@@ -207,41 +207,34 @@
         <main>
             <!-- Sections to dynamically show/hide -->
             <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','HUMAN_RESOURCE')">
-                <section id="overview" class="section">
-                    <h2>HR Management Overview</h2>
-                    <div class="card-container">
-                        <div class="card">
-                            <h3>Manage Employee Records</h3>
-                            <p>Records include roles, departments, and payroll integration.</p>
-                            <a th:href="@{/employee/hr/empDashboard}" class="button-link">View Details</a>
-                        </div>
-                        <div class="card">
-                            <h3>Recruitment and Onboarding</h3>
-                            <p>Oversees recruitment, onboarding, and offboarding processes.</p>
-                            <a th:href="@{/employee/}" class="button-link">View Details</a>
-                        </div>
-                        <div class="card">
-                            <h3>Compliance Management</h3>
-                            <p>Ensures compliance with safety, environmental, and regulatory standards.</p>
-                            <a th:href="@{/employee/}" class="button-link">View Details</a>
-                        </div>
-                        <div class="card">
-                            <h3>Audits and Compliance Reports</h3>
-                            <p>Conducts audits and prepares compliance reports.</p>
-                            <a th:href="@{/employee/}" class="button-link">View Details</a>
-                        </div>
-                        <div class="card">
-                            <h3>Attendance and Payroll</h3>
-                            <p>Tracks attendance, manages payroll, and handles employee performance reviews.</p>
-                            <a th:href="@{/employee/}" class="button-link">View Details</a>
-                        </div>
-                        <div class="card">
-                            <h3>Budget Collaboration</h3>
-                            <p>Works closely with the Finance Manager on budget-related matters concerning HR.</p>
-                            <a th:href="@{/employee/}" class="button-link">View Details</a>
-                        </div>
-                    </div>
-                </section>
+                 <section id="overview" class="section"><br><br>
+        <h2 style="text-align:center;color:#16a085">Employee Dashboard</h2><br><br>
+        <div class="card-container">
+            <div class="card">
+                <h3>Employees List</h3><br>
+                <p>Full Employees list</p><br>
+                <a th:href="@{/employee/hr/EmployeeList}" class="button-link">View Details</a>
+            </div>
+            <div class="card">
+                <h3>Delete Employee</h3><br>
+                <h2 th:text="${Emp_Deleted}" style="color:red"></h2>
+                <p>Enter the email of the employee to delete:</p>
+                <input type="text" id="emailInput" placeholder="Enter Email" required>
+                <button onclick="showDeleteDialog()">Proceed</button>
+            </div>
+            <div class="card">
+                <h3>Register Employee</h3>
+                <h2 th:text="${Employee_Added}" style="color:green"></h2><br>
+                <p>Entering the new Employee Records into database</p>
+                <a th:href="@{/employee/hr/register}" class="button-link">Register</a>
+            </div>
+             <div class="card">
+                <h3>Employee Deletion Req List</h3><br>
+                 <p>Employee Deletion Requests List </p><br>
+                <a th:href="@{/employee/hr/dlteEmpReqList}" class="button-link">List</a>
+            </div>
+        </div>
+    </section>
             </div><!-- Admin ,HR -->
             <div sec:authorize="hasAnyAuthority('GENERAL_MANAGER','PRODUCTION_MANAGER')">
                 <section id="production" class="section hidden">

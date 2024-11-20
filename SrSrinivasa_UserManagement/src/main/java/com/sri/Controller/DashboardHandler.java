@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sri.Service.EmployeeService;
 
 @Controller
-@RequestMapping("/employee/Dashboard")
+@RequestMapping("/employee")
 public class DashboardHandler {
 
 	@Autowired
@@ -20,12 +20,12 @@ public class DashboardHandler {
 	
 	@GetMapping("/")
 	public String getDashboard() {
-  		return "Dashboard";
+  		return "Home";
 	}
 	
-	@GetMapping("/hr")
+	@GetMapping({"/Dashboard/","/Dashboard/hr"})
 	public String getHr() {
-		return "HRDashboard";
+		return "HREmployeeDashboard";
 	}
 	
 	 

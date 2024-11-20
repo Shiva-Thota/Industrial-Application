@@ -10,7 +10,7 @@ import com.sri.DTO.AuthRequest;
 import com.sri.Service.EmployeeService;
 
 @Controller
-@RequestMapping("/employee")
+//@RequestMapping("/employee")
 public class mainHandler {
 	
 	@Autowired

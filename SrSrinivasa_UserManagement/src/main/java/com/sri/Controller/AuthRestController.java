@@ -37,23 +37,6 @@ public class AuthRestController {
 	
 	 @Autowired
 	 private AuthenticationManager authenticationManager;
-
-	  
-//	  @GetMapping("/loginPage")
-//		public String getLoginPage() {
-//			return "EmployeeLogin";
-//		}
-	
-//	@PostMapping("/login")
-//	public ResponseEntity<?> authenticateUser(@RequestBody AuthRequest authRequest) {
-//		Authentication authentication=authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(authRequest.getUsername(),
-//												authRequest.getPassword()));
-//		SecurityContextHolder.getContext().setAuthentication(authentication);
-//		List<String> roles=empSer.getRolesWithEmail(authRequest.getUsername());
-//		String Name=empSer.getFullNameWithEmail(authRequest.getUsername());
-//		String jwt=jsonWebTokenUtil.generateToken(authRequest.getUsername(), Map.of("ROLES",roles,"Name",Name));
-//		return ResponseEntity.ok(new AuthResponse(jwt));
-//	}
 	  
 	@PostMapping("/login")
 	public ResponseEntity<String> authenticateUser(@RequestParam("username") String username,@RequestParam("password") String password) {

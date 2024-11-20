@@ -56,10 +56,10 @@
     <!-- Profile Header -->
     <h2 style="color:white;text-align:center">Reset Password</h2><br><br>
      <h2 style="color: Green;text-align:center" th:if="${msg == 'Password Updated'}">Password Updated</h2>
-     <form th:action="@{/employee/user/updatePassword}" method="get" enctype="multipart/form-data" onsubmit="return validatePasswords()">
+     <form th:action="@{/employee/user/updatePassword}" method="post" enctype="multipart/form-data" onsubmit="return validatePasswords()">
          
            <input type="hidden" name="username" th:value="${username}">
-         
+         <input type="hidden" name="enteredOTP" th:value="${enteredOTP}">
         <div class="input-group" style="color:white;">
             <label for="new_password">New Password:</label>
             <input type="password" id="new_password" name="newPswrd" required>

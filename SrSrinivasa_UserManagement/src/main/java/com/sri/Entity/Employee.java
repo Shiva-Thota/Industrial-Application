@@ -24,7 +24,6 @@ import lombok.Data;
 @Entity
 @Data
 @SQLDelete(sql="update Employee set enabled=false where email=?")
-@Where(clause="enabled<>false")
 public class Employee implements Serializable{
 	
 	@Id
@@ -32,8 +31,9 @@ public class Employee implements Serializable{
 	private String email;
 	private String firstName;
 	private String lastName;
-	private  String father;
-	private  String department;
+	private String father;
+	private String department;
+	private boolean reJoined; 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
 	private String gender;

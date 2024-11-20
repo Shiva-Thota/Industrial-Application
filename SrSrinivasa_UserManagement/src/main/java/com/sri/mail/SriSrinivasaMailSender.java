@@ -13,7 +13,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Component
-public class MailSender {
+public class SriSrinivasaMailSender {
 	
 	@Autowired
 	JavaMailSender mailSender;
@@ -63,7 +63,7 @@ public class MailSender {
 				+ "\r\n"
 				+ "We received a request to reset the password for your account. Please use the One-Time Password (OTP) provided below to proceed with resetting your password.\r\n"
 				+ "\r\n"
-				+ "Your OTP: [OTP Code]\r\n"
+				+ "Your OTP:"+OTP+"\r\n"
 				+ "\r\n"
 				+ "This OTP is valid for the next [time duration, e.g., 15 minutes]. If you did not initiate this request, please contact our IT support team immediately at [support contact details].\r\n"
 				+ "\r\n"

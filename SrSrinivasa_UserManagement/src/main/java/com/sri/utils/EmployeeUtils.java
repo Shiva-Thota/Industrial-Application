@@ -32,6 +32,7 @@ public class EmployeeUtils {
 		
  			employeeModel.setEnabled(employee.isEnabled());
 		
+ 			employeeModel.setReJoined(employee.isReJoined());
  			employeeModel.setRoles(employee.getRoles());
  			employeeModel.setBloodGroup(employee.getBloodGroup());
  			employeeModel.setEmergencyContact(employee.getEmergencyContact());
@@ -58,6 +59,7 @@ public class EmployeeUtils {
  			employee.setPassword(employeeModel.getPassword());
  			employee.setEnabled(employeeModel.isEnabled());
 		
+ 			employee.setReJoined(employeeModel.isReJoined());
  			employee.setRoles(employeeModel.getRoles());
  			employee.setBloodGroup(employeeModel.getBloodGroup());
  			employee.setEmergencyContact(employeeModel.getEmergencyContact());

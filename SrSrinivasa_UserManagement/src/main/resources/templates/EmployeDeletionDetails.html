@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layouts/default">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/index.css" th:href="@{/css/ProfileStyles.css}" />
+</head>
+<body>
+    <div th:replace="header"></div>
+    <!-- Employee Deletion Profile Container -->
+    <div class="profile-container">
+        <!-- Profile Details Section -->
+        <div class="profile-details">
+           <h2 style="color: #16a085;text-align:center">Employee Deletion Details</h2>
+           <br><br>
+            <p><strong>Deletion Id:</strong> <span th:text="${EmployeeDeletion.employeeDeletionId}"></span></p>            
+            <p><strong>Email:</strong> <span th:text="${EmployeeDeletion.email}"></span></p>
+            <p><strong>Name:</strong> <span th:text="${EmployeeDeletion.name}"></span></p>
+            <p><strong>Department:</strong> <span th:text="${EmployeeDeletion.department}"></span></p>
+            <p><strong>Status:</strong> <span th:text="${EmployeeDeletion.status}"></span></p>
+            <p><strong>Reason for Deletion:</strong> <span th:text="${EmployeeDeletion.reasonForDeletion}"></span></p>
+            <p><strong>Requested By:</strong> <span th:text="${EmployeeDeletion.requestedBy}"></span></p>
+            <p><strong>Requested Date:</strong> <span th:text="${EmployeeDeletion.requestedDate}"></span></p>
+            <div th:if="${EmployeeDeletion.status} == 'Approved'">
+	            <p><strong>Approved By:</strong> <span th:text="${EmployeeDeletion.approvedBy}"></span></p>
+	            <p><strong>Approved Date:</strong> <span th:text="${EmployeeDeletion.approvedDate}"></span></p>
+            </div>
+            <div th:if="${EmployeeDeletion.status} == 'Rejected'">
+	            <p><strong>Rejected By:</strong> <span th:text="${EmployeeDeletion.approvedBy}"></span></p>
+	            <p><strong>Rejected Date:</strong> <span th:text="${EmployeeDeletion.approvedDate}"></span></p>
+            </div>
+            <p><strong>Joined Date:</strong> <span th:text="${EmployeeDeletion.joinedDate}"></span></p>
+        </div>
+
+        <!-- Conditional Actions Section -->
+            <div class="profile-actions">
+            	<div th:if="${EmployeeDeletion.status} == 'Requested'">
+	                <a th:href="@{/employee/hr/dlteEmpReq/reject/{id}(id=${EmployeeDeletion.employeeDeletionId})}">Reject</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	          		<a th:href="@{/employee/hr/dlteEmpReq/approve/{id}/{email}(id=${EmployeeDeletion.employeeDeletionId},email=${EmployeeDeletion.email})}">Approve</a>
+          		</div>
+          		<a th:href="@{/employee/hr/profile(email=${EmployeeDeletion.email})}">View</a>
+            </div>
+         
+    </div>     
+</body>
+</html>

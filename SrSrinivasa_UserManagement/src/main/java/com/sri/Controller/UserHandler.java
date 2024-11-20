@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeModel;
+import com.sri.Entity.OTPTable;
 import com.sri.Exceptions.EmployeeNotFoundException;
 import com.sri.Exceptions.NotAuthorizedException;
 import com.sri.Exceptions.passwordNotMatchedException;
@@ -125,45 +126,70 @@ public class UserHandler {
 		return "redirect:"+gateWayUrl+"/employee/Dashboard/";
 	}
 	
+	@GetMapping("/forgotPasswordPage")
+	public String getForgotPasswordPage() {
+		return "ForgotPasswordPage";
+	}
+	
+	
+	
 	@PostMapping("/forgotPassword")
 	public String getForgotPasswordPage(@RequestParam("username") String username,Map<String,String> map,RedirectAttributes redirectAttributes) {
 		try {
 			empSer.getEmployee(username);
 		} catch (EmployeeNotFoundException e) {
 			redirectAttributes.addFlashAttribute("email_doesnot_exist", "Enter Valid Registered Email Id");
-			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+			return "redirect:"+gateWayUrl+"/employee/user/forgotPasswordPage";
 		}
 		try {
 			String OTP = empSer.ForgotPasswordSendOTP(username);
-			map.put("SentOTP", OTP);
-			map.put(username, username);
+			OTPTable otpTable=new OTPTable();
+			otpTable.setEmail(username);
+			otpTable.setOtp(OTP);
+			empSer.deleteOTP(username);
+			empSer.addOTP(otpTable);
+			map.put("username", username);
 			return "ForgotPswrdOTPPage";
 		} catch (MessagingException e) {
 			redirectAttributes.addFlashAttribute("email_doesnot_exist", "Internal Server Error");
-			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+			return "redirect:"+gateWayUrl+"/employee/user/forgotPasswordPage";
 		}
 	}
 	
 	@PostMapping("/updateForgotPassword")
-	public String updateForgotPassword(@RequestParam("enteredOTP") String enteredOTP,@RequestParam("SentOTP") String SentOTP,@RequestParam("username") String username,Map<String,String> map,RedirectAttributes redirectAttributes) {
-		if(enteredOTP.equalsIgnoreCase(SentOTP)) {
-			map.put("username", username);
-			return "EmployeePswrdUpdate";
-		}else {
-			redirectAttributes.addFlashAttribute("email_doesnot_exist", "OTP havent Matched");
-			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+	public String updateForgotPassword(@RequestParam("enteredOTP") String enteredOTP,@RequestParam("username") String username,Map<String,String> map,RedirectAttributes redirectAttributes) {
+ 		try {
+ 			String SentOTP = empSer.getOTP(username).getOtp();
+			if(enteredOTP.equalsIgnoreCase(SentOTP)) {
+	 			map.put("username", username);
+	 			map.put("enteredOTP", enteredOTP);
+	 			return "EmployeePswrdUpdate";
+			}else {
+	 			redirectAttributes.addFlashAttribute("email_doesnot_exist", "OTP havent Matched");
+				return "redirect:"+gateWayUrl+"/employee/user/forgotPasswordPage";
+			}
+		} catch (EmployeeNotFoundException e) {
+			redirectAttributes.addFlashAttribute("email_doesnot_exist", "Internal Server Error");
+			return "redirect:"+gateWayUrl+"/employee/user/forgotPasswordPage";
 		}
 	}
 	
 	@PostMapping("/updatePassword")
-	public String UpdatePassword(@RequestParam("newPswrd") String newPswrd,@RequestParam("username") String username,RedirectAttributes redirectAttributes) {
+	public String UpdatePassword(@RequestParam("enteredOTP") String enteredOTP,@RequestParam("newPswrd") String newPswrd,@RequestParam("username") String username,RedirectAttributes redirectAttributes) {
 		try {
-			empSer.updateForgotPassword(username, newPswrd);
-			redirectAttributes.addFlashAttribute("passwordUpdated", "Password Updated");
-			return "redirect:"+gateWayUrl+"/auth/login";
+			String SentOTP = empSer.getOTP(username).getOtp();
+			if(enteredOTP.equalsIgnoreCase(SentOTP)) {
+				empSer.updateForgotPassword(username, newPswrd);
+	 			redirectAttributes.addFlashAttribute("passwordUpdated", "Password Updated");
+	 			empSer.deleteOTP(username);
+	 			return "redirect:"+gateWayUrl+"/auth/login";
+			}else {
+				redirectAttributes.addFlashAttribute("email_doesnot_exist", "Internal Server Error");
+				return "redirect:"+gateWayUrl+"/employee/user/forgotPasswordPage";
+			}
 		} catch (EmployeeNotFoundException e) {
 			redirectAttributes.addFlashAttribute("email_doesnot_exist", "Enter Valid Registered Email Id");
-			return "redirect:"+gateWayUrl+"/auth/forgotPasswordPage";
+			return "redirect:"+gateWayUrl+"/employee/user/forgotPasswordPage";
 		}
 	}
 	

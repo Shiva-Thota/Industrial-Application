@@ -1,13 +1,80 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">  
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" type="text/css" media="all"
-     href="/css/index.css" th:href="@{/css/HomeStyles.css}" /> 
+    <link rel="stylesheet" type="text/css" media="all" href="/css/index.css" th:href="@{/css/HomeStyles.css}" />
+    <style>
+        /* Full-Width Carousel */
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 89vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Hide anything outside the carousel */
+        }
+
+        .carousel-images {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 1s ease-in-out;
+        }
+
+        .carousel-images img {
+            width: 100%; /* Full width of the container */
+            height: 100%; /* Full height of the container */
+            object-fit: cover; /* Ensures images cover the container */
+            display: none; /* Initially hide all images */
+        }
+
+        .carousel-images img.active {
+            display: block; /* Only show the active image */
+        }
+
+        /* Text on Images */
+        .carousel-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Adds a shadow to make text more readable */
+            text-align: center;
+            display: none; /* Initially hide all texts */
+        }
+
+        .carousel-text.active-text {
+            display: block; /* Show only the active text */
+        }
+
+        /* Navigation arrows (optional) */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 2rem;
+        }
+
+        .left-arrow {
+            left: 20px;
+        }
+
+        .right-arrow {
+            right: 20px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header Section -->
+ <!-- Header Section -->
     <header>
      
         <div class="logo">
@@ -26,15 +93,26 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Optimize Your Industrial Workflow</h2>
-            <p>Seamlessly manage production, maintenance, and equipment health with real-time monitoring and powerful analytics.</p>
-            <a href="#" class="btn-get-started">Get Started</a>
+    <!-- Full-Width Carousel (Hero Section) -->
+    <div class="carousel">
+        <div class="carousel-images" id="carouselImages">
+            <!-- Image 1 -->
+            <img th:src="@{/images/image1.png}" alt="Image 1" class="active">
+            <div class="carousel-text active-text">Welcome to Sri Srinivasa Industries</div>
+            <!-- Image 2 -->
+            <img th:src="@{/images/img2.jpg}" alt="Image 2">
+            <div class="carousel-text">Innovating the Future of Manufacturing</div>
+            <!-- Image 3 -->
+            <img th:src="@{/images/img3.jpeg}" alt="Image 3">
+            <div class="carousel-text">Efficiency & Excellence in Every Step</div>
         </div>
-    </section>
 
+        <!-- Navigation Arrows -->
+        <div class="arrow left-arrow" onclick="moveSlide(-1)">&#10094;</div>
+        <div class="arrow right-arrow" onclick="moveSlide(1)">&#10095;</div>
+    </div>
+	
+	
     <!-- Features Section -->
     <section class="features">
         <h2>Core Features</h2>
@@ -54,13 +132,6 @@
         </div>
     </section>
 
-    <!-- Call to Action Section -->
-    <section class="cta">
-        <h2>Ready to Boost Your Industrial Performance?</h2>
-        <p>Sign up today and start optimizing your operations with our all-in-one platform.</p>
-        <a href="#" class="btn-signup">Login</a>
-    </section>
-
     <!-- Footer Section -->
     <footer>
         <p>&copy; 2024 Industrial Application. All rights reserved.</p>
@@ -70,5 +141,23 @@
             <a href="#">Support</a>
         </nav>
     </footer>
+
+    <script>
+        let currentIndex = 0;
+
+        function moveSlide(direction) {
+            const slides = document.querySelectorAll('.carousel-images img');
+            const texts = document.querySelectorAll('.carousel-text');
+            
+            slides[currentIndex].classList.remove('active'); // Hide the current image
+            texts[currentIndex].classList.remove('active-text'); // Hide the current text
+            currentIndex = (currentIndex + direction + slides.length) % slides.length;
+            slides[currentIndex].classList.add('active'); // Show the new image
+            texts[currentIndex].classList.add('active-text'); // Show the new text
+        }
+
+        // Automatically move to the next slide every 5 seconds
+        setInterval(() => moveSlide(1), 5000);
+    </script>
 </body>
 </html>
