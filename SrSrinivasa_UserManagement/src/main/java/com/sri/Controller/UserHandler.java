@@ -106,10 +106,7 @@ public class UserHandler {
 	 
 	
 	@PostMapping("/updateEmp")
-	public String updateEmployeee(@ModelAttribute EmployeeModel employeeModel,RedirectAttributes redirectAttribute,BindingResult error,Principal principal) throws NotAuthorizedException {
-		String email=principal.getName();
-		if(!employeeModel.getEmail().equals(email))
-			throw new NotAuthorizedException("Not Authorized");
+	public String updateEmployeee(@ModelAttribute EmployeeModel employeeModel,RedirectAttributes redirectAttribute,BindingResult error,Principal principal) throws NotAuthorizedException {		 
 		try {
 			if(employeeUpdateFormValidator.supports(EmployeeModel.class)) {
 				employeeUpdateFormValidator.validate(employeeModel, error);

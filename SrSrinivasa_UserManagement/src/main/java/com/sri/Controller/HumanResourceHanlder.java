@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sri.Entity.Employee;
@@ -282,7 +283,7 @@ public class HumanResourceHanlder {
 	
 	@GetMapping("/dlteEmpReqList")
 	public String getDeleteEmpReqList(@RequestParam(name="email",required = false) String email,@RequestParam(name="dprtmnt",required = false) String department,@RequestParam(name="sts",required = false) String status,
-			@RequestParam(name="empDltnId",required = false) Long employeeDeletionId,@PageableDefault(size =2,page = 0)  Pageable pg,Map<String,Object> map) {
+			@RequestParam(name="empDltnId",required = false) Long employeeDeletionId,@PageableDefault(size =15,page = 0)  Pageable pg,Map<String,Object> map) {
 		try {
 			
 		if(email==null) {
@@ -339,6 +340,45 @@ public class HumanResourceHanlder {
 			return "error-404";
 		}
 	}
+	
+	
+	@GetMapping("/addBulkEmployee")
+	public String addBulkEmployee() {
+		return "EmployeeBulkRegister";
+	}
+	
+	@PostMapping("/addBulkEmployee")
+	 public String uploadExcelFile(@RequestParam("file") MultipartFile file, Map<String,String> model,RedirectAttributes redirectAttributes) {
+		 if (file.isEmpty()) {
+	            model.put("message", "Please upload a file!");
+	            return "EmployeeBulkRegister";
+	        }
+
+	        // Get the file extension
+	        String fileExtension = getFileExtension(file.getOriginalFilename());
+ 	        try {
+	            if (fileExtension.equals("xls")) {
+	                throw new Exception();
+	            } else if (fileExtension.equals("csv")) {
+ 	                List<Employee> employees = empSer.parseEmployeeCsv(file);
+  	                empSer.addAllEmployee(employees);
+  	              redirectAttributes.addFlashAttribute("message", "CSV file uploaded and data saved successfully!");
+ 	            } else {
+ 	            	redirectAttributes.addFlashAttribute("message", "Please upload a valid .xls or .csv file!");
+	            }
+  	        } catch (Exception e) {
+//	        	e.printStackTrace();
+	        	redirectAttributes.addFlashAttribute("message", "Error processing file");
+	        }
+         return "redirect:"+gateWayUrl+"/employee/hr/addBulkEmployee";
+    }
+	 // Helper method to get file extension
+    private String getFileExtension(String filename) {
+        if (filename != null && filename.contains(".")) {
+            return filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+        }
+        return "";
+    }
 	
 	
 	@ModelAttribute("Departments")

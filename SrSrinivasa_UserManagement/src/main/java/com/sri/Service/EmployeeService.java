@@ -1,5 +1,6 @@
 package com.sri.Service;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeDeletion;
@@ -22,6 +24,7 @@ import jakarta.mail.MessagingException;
 public interface EmployeeService extends UserDetailsService{
 
 	String addEmployee(Employee emp) throws SQLException, MessagingException;
+	String addAllEmployee(List<Employee> empList);
 	Employee getEmployee(String email) throws EmployeeNotFoundException;
 	String addOldEmployee(String email) throws EmployeeNotFoundException;
 	String updateEmployee(EmployeeModel emp) throws EmployeeNotFoundException;
@@ -69,4 +72,5 @@ public interface EmployeeService extends UserDetailsService{
 	String addOTP(OTPTable otpTable);
 	OTPTable getOTP(String email) throws EmployeeNotFoundException;
 	String deleteOTP(String email);
+	List<Employee> parseEmployeeCsv(MultipartFile file) throws IOException;
 }

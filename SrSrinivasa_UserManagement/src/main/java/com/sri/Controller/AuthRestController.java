@@ -35,6 +35,7 @@ public class AuthRestController {
 	@Autowired
 	JSONWebTokenUtil jsonWebTokenUtil;
 	
+	
 	 @Autowired
 	 private AuthenticationManager authenticationManager;
 	  

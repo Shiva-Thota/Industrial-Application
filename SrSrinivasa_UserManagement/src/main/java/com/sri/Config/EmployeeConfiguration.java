@@ -39,9 +39,11 @@ public class EmployeeConfiguration {
 	@Bean
     SecurityFilterChain  filterChains(HttpSecurity http) throws Exception {
     	http.authorizeHttpRequests(req-> 
-    		req.requestMatchers("/employee/","/employee/login","/auth/login","/auth/loginPage","/images/**","/css/**"
+    		req.requestMatchers("/employee/login","/images/**","/css/**","/employee/error-403"
     				,"/employee/user/forgotPassword","/employee/user/updateForgotPassword","/employee/user/updatePassword","/employee/user/forgotPasswordPage").permitAll()
-    		.requestMatchers("/employee/hr/**").hasAnyAuthority("GENERAL_MANAGER","HUMAN_RESOURCE")
+    		.requestMatchers("/employee/hr/addToDeleteEmp","/employee/hr/changeRoleandDprt/**","/employee/hr//EmployeeList/download","/employee/hr/EmployeeList","/employee/hr/profile","/employee/hr/updateEmp"
+    				,"/employee/hr/enableOldEmployee","/employee/hr/enableOldEmp/**","/employee/hr/register","/employee/","/employee/Dashboard/hr","/employee/Dashboard/").hasAnyAuthority("GENERAL_MANAGER","HUMAN_RESOURCE")
+    		.requestMatchers("/employee/hr/dlteEmpReqList","/employee/hr/dlteEmpReqDetails/**","/employee/hr/dlteEmpReq/approve/**","/employee/hr/dlteEmpReq/reject/**").hasAuthority("GENERAL_MANAGER")
     		.anyRequest().authenticated()
     	).csrf(csrf->csrf.disable())
     	.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

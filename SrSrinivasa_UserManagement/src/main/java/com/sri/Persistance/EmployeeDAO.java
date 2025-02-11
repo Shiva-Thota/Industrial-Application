@@ -17,6 +17,7 @@ import com.sri.Exceptions.EmployeeNotFoundException;
  public interface EmployeeDAO {
 
 	String addEmployee(Employee emp) throws SQLException;
+	String addAllEmployee(List<Employee> empList);
 	String addExistingEmployee(Employee emp);
 	Employee getEmployee(String email) throws EmployeeNotFoundException;
 	String updateEmployee(Employee emp) throws EmployeeNotFoundException;

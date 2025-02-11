@@ -23,25 +23,21 @@ public class MessageProducer {
 	}
 	
 	public void MessageForInventoryDeleteEmployee(String email){
-		System.out.println("Emp Deleted Inventory --------------------------------------");
 
 		Message<String> message=MessageBuilder.withPayload(email)
 				.setHeader(KafkaHeaders.TOPIC, "inventory-employee-delete")
 				.setHeader("actionType","delete")
 				.build();
 		kafkaTemplate.send(message);
-		System.out.println("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 	}
 	
 	public void MessageForProductionDeleteEmployee(String email){
-		System.out.println("Emp Deleted Prodcution --------------------------------------");
 		Message<String> message=MessageBuilder.withPayload(email)
 				.setHeader(KafkaHeaders.TOPIC, "production-employee-delete")
 				.setHeader("actionType","delete")
 				.build();
 		kafkaTemplate.send(message);
-		System.out.println("Emp Deleted Prodcution --------------------------------------    2");
-
+ 
 	}
 	
 	

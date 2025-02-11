@@ -1,15 +1,22 @@
 package com.sri.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sri.Entity.Employee;
 import com.sri.Entity.EmployeeDeletion;
@@ -44,9 +52,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	MessageProducer messageProducer;
 	
-	@Value("${Password_Mail_Text}")
-	String passwordMailText;
-	
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
@@ -62,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		emp.setPassword(passwordEncoder.encode(password));
 		
 		//sending password to the mail
-//		mailSender.sendJoiningMail(emp.getFirstName()+" "+emp.getLastName(),emp.getEmail(),emp.getRoles(),password);
+		mailSender.sendJoiningMail(emp.getFirstName()+" "+emp.getLastName(),emp.getEmail(),emp.getRoles(),password);
 
 		//setting todays date
 		emp.setDateOfJoining(new Date());		
@@ -71,19 +76,29 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
+	public String addAllEmployee(List<Employee> empList) {
+ 		return empDao.addAllEmployee(empList);
+	}
+	
+	@Override
 	public String addOldEmployee(String email) throws EmployeeNotFoundException {
 		//setting the random password
 		char[] ch=new char[10];
 		for(int i=0;i<10;i++) {
 			ch[i]=(char)new Random().nextInt(65,123);
 		}
-		String password=String.valueOf(ch);				
- 		//sending password to the mail
-//				mailSender.sendJoiningMail(emp.getFirstName()+" "+emp.getLastName(),emp.getEmail(),emp.getRoles(),password);
 		Optional<Employee> oldEmp=empDao.getOldEmployeedetais(email);
  		if(oldEmp.isEmpty())
 			throw new EmployeeNotFoundException(email);
  		Employee emp=oldEmp.get();
+		String password=String.valueOf(ch);				
+ 		//sending password to the mail
+				try {
+					mailSender.sendJoiningMail(emp.getFirstName()+" "+emp.getLastName(),emp.getEmail(),emp.getRoles(),password);
+				} catch (MessagingException e) {
+ 					e.printStackTrace();
+				}
+		
  		if(empDao.isEmployeeOldWorker(email)) {
  			emp.setPassword(passwordEncoder.encode(password));
  			emp.setDateOfJoining(new Date());
@@ -244,8 +259,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public String ForgotPasswordSendOTP(String email) throws MessagingException {
 		String OTP=new Random().nextInt(1000, 9999)+"";
-		System.out.println(OTP);
-//		mailSender.sendForgotPasswordMail(email, OTP);
+ 		mailSender.sendForgotPasswordMail(email, OTP);
 		return OTP;
 	}
 
@@ -375,6 +389,81 @@ public class EmployeeServiceImpl implements EmployeeService{
  		return empDao.getEmployeeDateOfJoiningbyEmail(email);
 	}
 	
+	@Override
+	public List<Employee> parseEmployeeCsv(MultipartFile file) throws IOException {
+	    List<Employee> employeeList = new ArrayList<>();
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+	    InputStreamReader reader = new InputStreamReader(file.getInputStream());
+	    BufferedReader bufferedReader = new BufferedReader(reader);
+
+	    StringBuilder currentRecord = new StringBuilder();
+	    String line;
+	    boolean insideQuote = false;
+
+	    // Skip header row
+	    bufferedReader.readLine();
+
+	    while ((line = bufferedReader.readLine()) != null) {
+	        // Check for unbalanced quotes to determine if it's part of a multi-line record
+	        int quoteCount = line.length() - line.replace("\"", "").length();
+	        if (quoteCount % 2 == 1) {
+	            insideQuote = !insideQuote;
+	        }
+
+	        currentRecord.append(line).append("\n");
+
+	        // Process the record only if not inside a quoted field
+	        if (!insideQuote) {
+	            String record = currentRecord.toString().trim();
+	            currentRecord.setLength(0); // Clear the buffer for the next record
+
+	            // Regex pattern to split fields respecting quoted text
+	            String[] columns = record.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+
+	            if (columns.length < 21) {
+	                continue; // Skip invalid rows
+	            }
+
+	            Employee employee = new Employee();
+	            employee.setEmail(columns[0].replace("\"", ""));
+	            employee.setFirstName(columns[1].replace("\"", ""));
+	            employee.setLastName(columns[2].replace("\"", ""));
+	            employee.setFather(columns[3].replace("\"", ""));
+	            employee.setDepartment(columns[4].replace("\"", ""));
+	            employee.setReJoined(Boolean.parseBoolean(columns[5].replace("\"", "")));
+	            try {
+	                employee.setDateOfBirth(dateFormat.parse(columns[6].replace("\"", "")));
+	            } catch (Exception e) {
+	                employee.setDateOfBirth(null);
+	            }
+	            employee.setGender(columns[7].replace("\"", ""));
+	            employee.setPhoneNumber(columns[8].replace("\"", ""));
+	            employee.setAddress(columns[9].replace("\"", "").replace("\n", " ").trim());
+	            employee.setPassword(passwordEncoder.encode(columns[10].replace("\"", "")));
+	            try {
+	                employee.setDateOfJoining(dateFormat.parse(columns[11].replace("\"", "")));
+	            } catch (Exception e) {
+	                employee.setDateOfJoining(null);
+	            }
+	            employee.setEnabled(Boolean.parseBoolean(columns[12].replace("\"", "")));
+	            employee.setBloodGroup(columns[13].replace("\"", ""));
+	            employee.setEmergencyPerson(columns[14].replace("\"", ""));
+	            employee.setEmergencyContact(columns[15].replace("\"", ""));
+	            employee.setMaritalStatus(columns[16].replace("\"", ""));
+	            employee.setCapabilities(columns[17].replace("\"", ""));
+	            employee.setRegisteredTeam(columns[18].replace("\"", ""));
+	            employee.setAddharNo(columns[19].replace("\"", ""));
+	            employee.setRoles(new HashSet<>(Arrays.asList(columns[20].replace("\"", "").split(","))));
+
+	            employeeList.add(employee);
+	        }
+	    }
+
+	    bufferedReader.close();
+	    return employeeList;
+	}
+
 
 }
 

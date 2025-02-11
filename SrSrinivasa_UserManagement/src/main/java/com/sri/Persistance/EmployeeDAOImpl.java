@@ -41,6 +41,12 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	}
 
 	@Override
+	public String addAllEmployee(List<Employee> empList) {
+		empRepo.saveAll(empList);
+ 		return null;
+	}
+	
+	@Override
 	public String addExistingEmployee(Employee emp) {
  		return empRepo.save(emp).getEmail();
 	}
@@ -356,4 +362,5 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	public void setRemoveRegisteredTeamwithDepartmentAndRegisteredTeam(String department, String registeredTeam) {
 		empRepo.setRemoveRegisteredTeamwithDepartmentAndRegisteredTeam(department, registeredTeam);
 		}
+
 }
